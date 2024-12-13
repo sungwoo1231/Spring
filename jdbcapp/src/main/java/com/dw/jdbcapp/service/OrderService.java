@@ -15,4 +15,11 @@ public class OrderService {
     public List<Order> getAllOrders(){
         return orderRepository.getAllOrders();
     }
+
+    public Order getOrderById(String id){
+        return orderRepository.getOrderById(id);
+    }
+    public Order getOrderById_2(String number,String id){
+        return orderRepository.getOrderById_2(number,id);
+    }
 }

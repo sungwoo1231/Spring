@@ -36,7 +36,7 @@ public class OrderController {
     public Order getOrderById_2(@PathVariable String number,@PathVariable String id){
         return orderService.getOrderById_2(number,id);
     }
-  @GetMapping("/api/orders/query") // orders?number=11&id=H0249
+  @GetMapping("/api/orders/query") // /api/orders/query?number=11&id=NETVI
     public Order getOrderById(@RequestParam String number,@RequestParam String id){
         return orderService.getOrderById_2(number,id);
   }

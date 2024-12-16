@@ -150,7 +150,36 @@ public class EmployeeRepository {
         }
         return employee;
     }
-}
+    public Employee saveEmployee(Employee employee){
+        String query = "insert into 사원(사원번호,이름,영문이름,직위,성별,생일,입사일,주소,도시,지역,집전화,상사번호,부서번호) "
+                + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " ;
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1,employee.getEmployeeNumber());
+            pstmt.setString(2,employee.getName());
+            pstmt.setString(3,employee.getEnglishName());
+            pstmt.setString(4,employee.getPosition());
+            pstmt.setString(5,employee.getGender());
+            pstmt.setString(6,employee.getBirthday().toString());
+            pstmt.setString(7,employee.getDateOfEmployment().toString());
+            pstmt.setString(8,employee.getAddress());
+            pstmt.setString(9,employee.getCity());
+            pstmt.setString(10,employee.getArea());
+            pstmt.setString(11,employee.getHomePhoneNumber());
+            pstmt.setString(12,employee.getSupervisorDepartmentNumber());
+            pstmt.setString(13,employee.getDepartmentNumber());
+
+            pstmt.executeUpdate();
+            System.out.println("INSERT 성공");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // 매개변수로 전달받은 Department 객체 정보를 MySQL에 insert 후
+        // 성공이면 해당 객체를 리턴함
+        return employee;
+    }
+    }
+
 
 
 

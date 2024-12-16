@@ -40,6 +40,52 @@ public class DepartmentRepository {
     }
 
 
+    // Post(insert)
+    public Department saveDepartment(Department department) {
+
+        String query = "insert into 부서(부서번호,부서명) "
+                + "values (?, ?) "; // ? 자리에 매개변수를 넣을 예정
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(2, department.getDepartmentName());
+            pstmt.setString(1, department.getDepartmentNumber());
+            pstmt.executeUpdate();
+            System.out.println("INSERT 성공");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // 매개변수로 전달받은 Department 객체 정보를 MySQL에 insert 후
+        // 성공이면 해당 객체를 리턴함
+        return department;
+    }
+
+    // Put (Update)
+    public Department updateDepartment(Department department) {
+        String query = "update 부서 set 부서명 = ? where 부서번호 = ?";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, department.getDepartmentName());
+            pstmt.setString(2, department.getDepartmentNumber());
+            pstmt.executeUpdate();
+            System.out.println("Update 성공");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return department;
+    }
+
+    public String deleteDepartment(String id) {
+        String query = "delete from 부서 where 부서번호 = ? ";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1,id);
+            pstmt.executeUpdate();
+            System.out.println("Delete 성공: " + id);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return id;
+    }
+
 
 }
-

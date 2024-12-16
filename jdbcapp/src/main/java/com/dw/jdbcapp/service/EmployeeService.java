@@ -49,4 +49,7 @@ public class EmployeeService {
     public Employee getEmployeeById_3(String id,String position){
         return employeeRepository.getDepartmentById_3(id, position);
     }
+    public Employee saveEmployee(Employee employee){
+        return employeeRepository.saveEmployee(employee);
+    }
 }

@@ -13,7 +13,32 @@ public class DepartmentService {
     DepartmentRepository departmentRepository;
 
 
-    public List<Department> getAllDepartments(){
+    public List<Department> getAllDepartments() {
         return departmentRepository.getAllDepartments();
     }
+
+    // Post(insert)
+    public Department saveDepartment(Department department) {
+        return departmentRepository.saveDepartment(department);
+    }
+
+    // Post(insert)
+     // multiple data
+    public List<Department> saveDepartmentlist(List<Department> departmentList){
+        for (Department data : departmentList) {
+            departmentRepository.saveDepartment(data);
+        }
+        return departmentList;
+    }
+
+    // Put(update)
+    public Department updateDepartment(Department department){
+        return departmentRepository.updateDepartment(department);
+    }
+
+    // Delete
+    public String deleteDepartment(String id){
+        return departmentRepository.deleteDepartment(id);
+    }
 }
+

@@ -1,24 +1,21 @@
-package com.dw.jdbcapp.repository;
+package com.dw.jdbcapp.repository.jdbc;
 
-import com.dw.jdbcapp.model.Department;
-import com.dw.jdbcapp.model.MileGrade;
 import com.dw.jdbcapp.model.Order;
-import com.dw.jdbcapp.model.Product;
+import com.dw.jdbcapp.repository.iface.OrderRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
-public class OrderRepository {
+public class OrderJdbcRepository implements OrderRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/testdb";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
+    @Override
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         String query = "select * from 주문";
@@ -45,6 +42,7 @@ public class OrderRepository {
         return orders;
     }
 
+    @Override
     public Order getOrderById(String id) {
 
 
@@ -77,6 +75,7 @@ public class OrderRepository {
         }
         return order;
     }
+    @Override
     public Order getOrderById_2(String number,String id ) {
 
 

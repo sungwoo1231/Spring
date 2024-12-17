@@ -1,22 +1,20 @@
-package com.dw.jdbcapp.repository;
+package com.dw.jdbcapp.repository.jdbc;
 
 import com.dw.jdbcapp.model.Department;
-import com.dw.jdbcapp.model.Employee;
+import com.dw.jdbcapp.repository.iface.DepartmentRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
-public class DepartmentRepository {
+public class DepartmentJdbcRepository implements DepartmentRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/testdb";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
+    @Override
     public List<Department> getAllDepartments() {
         List<Department> departments = new ArrayList<>();
         String query = "select * from 부서";
@@ -41,6 +39,7 @@ public class DepartmentRepository {
 
 
     // Post(insert)
+    @Override
     public Department saveDepartment(Department department) {
 
         String query = "insert into 부서(부서번호,부서명) "
@@ -60,6 +59,7 @@ public class DepartmentRepository {
     }
 
     // Put (Update)
+    @Override
     public Department updateDepartment(Department department) {
         String query = "update 부서 set 부서명 = ? where 부서번호 = ?";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -74,6 +74,7 @@ public class DepartmentRepository {
         return department;
     }
 
+    @Override
     public String deleteDepartment(String id) {
         String query = "delete from 부서 where 부서번호 = ? ";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);

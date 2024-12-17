@@ -15,7 +15,7 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @GetMapping("/api/find/all/customer")
+    @GetMapping("/find/all/customer")
     public List<Customer> getAllCustomers(){
         return customerService.getAllCustomers();
     }

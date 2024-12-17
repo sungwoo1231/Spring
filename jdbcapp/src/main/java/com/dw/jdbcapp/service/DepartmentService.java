@@ -1,8 +1,10 @@
 package com.dw.jdbcapp.service;
 
 import com.dw.jdbcapp.model.Department;
-import com.dw.jdbcapp.repository.DepartmentRepository;
+import com.dw.jdbcapp.repository.iface.DepartmentRepository;
+import com.dw.jdbcapp.repository.jdbc.DepartmentJdbcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 @Service
 public class DepartmentService {
     @Autowired
+    @Qualifier("departmentTemplateRepository")
     DepartmentRepository departmentRepository;
 
 

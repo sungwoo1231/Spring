@@ -1,24 +1,20 @@
-package com.dw.jdbcapp.repository;
+package com.dw.jdbcapp.repository.jdbc;
 
-import com.dw.jdbcapp.model.Department;
-import com.dw.jdbcapp.model.Employee;
-import com.dw.jdbcapp.model.OrderDetail;
 import com.dw.jdbcapp.model.Product;
+import com.dw.jdbcapp.repository.iface.ProductRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
-public class ProductRepository {
+public class ProductJdbcRepository implements ProductRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/testdb";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
+    @Override
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String query = "select * from 제품";
@@ -43,6 +39,7 @@ public class ProductRepository {
         return products;
     }
 
+    @Override
     public Product getProductById(int id) {
 
         Product product = new Product();
@@ -74,6 +71,7 @@ public class ProductRepository {
     }
 
     // Post(insert)
+    @Override
     public Product saveProduct(Product product) {
         String query = "insert into 제품(제품번호,제품명,포장단위,단가,재고) "
                 + "values (?, ?, ?, ?, ?) ";
@@ -94,7 +92,7 @@ public class ProductRepository {
         return product;
     }
 
-
+    @Override
     public Product updateProduct(Product product) {
         String query = "update 제품 set 포장단위 = ? , 단가 = ?, 재고 = ? where 제품번호 = ?";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -112,6 +110,7 @@ public class ProductRepository {
 
     }
     // Delete
+    @Override
     public String deleteProduct(String id) {
         String query = "delete from 제품 where 제품번호 = ? ";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);

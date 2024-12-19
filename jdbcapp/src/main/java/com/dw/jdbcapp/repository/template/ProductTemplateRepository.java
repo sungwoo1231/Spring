@@ -1,8 +1,10 @@
 package com.dw.jdbcapp.repository.template;
 
+import com.dw.jdbcapp.exception.ResourceNotFoundException;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.repository.iface.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -20,7 +22,7 @@ public class ProductTemplateRepository implements ProductRepository {
     // RowMapper
     private final RowMapper<Product> productRowMapper = new RowMapper<Product>() {
         @Override
-                              //ResulSet rs = 1개의 행, int rowNum = 열의 갯수
+        //ResulSet rs = 1개의 행, int rowNum = 열의 갯수
         public Product mapRow(ResultSet rs, int rowNum) throws SQLException { // throws = try catch 역할
             Product product = new Product();
             product.setProductNumber(rs.getInt("제품번호"));
@@ -35,14 +37,22 @@ public class ProductTemplateRepository implements ProductRepository {
     @Override
     public List<Product> getAllProducts() {
         String query = "select * from 제품";
-       return jdbcTemplate.query(query,productRowMapper);
+        return jdbcTemplate.query(query, productRowMapper);
     }
 
     @Override
     // 단일 행이라 queryForObject를 사용
     public Product getProductById(int id) {
         String query = "select * from 제품 where 제품번호 = ?";
-        return jdbcTemplate.queryForObject(query,productRowMapper,id);
+        try {
+            return jdbcTemplate.queryForObject(query, productRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            // 자바에 정의된 예외를 사용자정의예외로 바꿈으로 인해
+            // CustomExceptionHandler의 코드를 단순하게 유지 가능
+            // (예외들을 비슷한 유형으로 그룹 지을 수 있음)
+            throw new ResourceNotFoundException(
+                    "제품번호가 올바르지 않습니다:" + id);
+        }
     }
 
     @Override

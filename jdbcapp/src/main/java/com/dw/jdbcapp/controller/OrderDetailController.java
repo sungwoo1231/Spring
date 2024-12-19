@@ -3,6 +3,8 @@ package com.dw.jdbcapp.controller;
 import com.dw.jdbcapp.model.OrderDetail;
 import com.dw.jdbcapp.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +16,7 @@ public class OrderDetailController {
     OrderDetailService orderDetailService;
 
     @GetMapping("/find-all-orderdetail")
-    public List<OrderDetail> getAllOrderDetails(){
-        return orderDetailService.getAllOrderDetails();
+    public ResponseEntity<List<OrderDetail>> getAllOrderDetails(){
+        return new ResponseEntity<>(orderDetailService.getAllOrderDetails(), HttpStatus.OK);
     }
 }

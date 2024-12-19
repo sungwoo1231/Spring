@@ -1,8 +1,10 @@
 package com.dw.jdbcapp.repository.template;
 
+import com.dw.jdbcapp.exception.ResourceNotFoundException;
 import com.dw.jdbcapp.model.Order;
 import com.dw.jdbcapp.repository.iface.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -35,21 +37,29 @@ public class OrderTemplateRepository implements OrderRepository {
     @Override
     public List<Order> getAllOrders() {
         String query = "select * from 주문 ";
-        return jdbcTemplate.query(query,orderRowMapper);
+        return jdbcTemplate.query(query, orderRowMapper);
     }
 
     @Override
     public Order getOrderById(String id) {
         String query = "select * from 주문 where 주문번호 = ?";
-        return jdbcTemplate.queryForObject(query,orderRowMapper,id);
+        try {
+            return jdbcTemplate.queryForObject(query, orderRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("주문번호가 올바르지 않습니다:" + id);
+        }
     }
 
     @Override
     public Order getOrderById_2(String number, String id) {
         String query = "select * from 주문 "
-                + "inner join 주문세부 on 주문.주문번호 = 주문세부.주문번호 "+
+                + "inner join 주문세부 on 주문.주문번호 = 주문세부.주문번호 " +
                 " inner join 제품 on 제품.제품번호 = 주문세부.제품번호 " +
                 " where 제품.제품번호 = ? and 주문.고객번호 = ? ";
-        return jdbcTemplate.queryForObject(query,orderRowMapper,number,id);
+        try {
+            return jdbcTemplate.queryForObject(query, orderRowMapper, number, id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("제품번호와 고객번호가 올바르지 않습니다:" + number + id);
+        }
     }
 }

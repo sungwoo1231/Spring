@@ -38,9 +38,9 @@ public class DepartmentTemplateRepository implements DepartmentRepository {
     public Department saveDepartment(Department department) {
         String query = "insert into 부서(부서번호,부서명) "
                 + "values (?, ?) ";
-        jdbcTemplate.update(query,
-                department.getDepartmentName(),
-                department.getDepartmentNumber());
+        jdbcTemplate.update(query, department.getDepartmentNumber(),
+                department.getDepartmentName());
+
         return department;
     }
 

@@ -12,7 +12,7 @@ public interface EmployeeRepository {
 
     List<Map<String, Object>> getEmployeesWithDepartName();
 
-    Employee getDepartmentById_3(String id, String position);
+    List<Employee> getDepartmentById_3(String id, String position);
 
     Employee saveEmployee(Employee employee);
 }

@@ -112,13 +112,12 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
         return employees;
     }
     @Override
-    public Employee getDepartmentById_3(String id, String position) {
+    public List<Employee> getDepartmentById_3(String id, String position) {
 
-        Employee employee = new Employee();
+        List<Employee> employees = new ArrayList<>();
 
-        String query = "select * from 사원 "
-                + " inner join 부서 on 사원.부서번호 = 부서.부서번호 " +
-                " where 부서.부서번호 = ? and 직위 = ? ";
+        String query =
+                "select * from 사원 where 부서번호 = ? and 직위 = ?";
         try (Connection connection = DriverManager.getConnection(
                 URL, USER, PASSWORD);
              PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -128,7 +127,7 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
             pstmt.setString(2,position);
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 while (resultSet.next()) {
-
+                    Employee employee = new Employee();
 
                     employee.setEmployeeNumber(resultSet.getString("사원번호"));
                     employee.setName(resultSet.getString("이름"));
@@ -143,14 +142,14 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
                     employee.setHomePhoneNumber(resultSet.getString("집전화"));
                     employee.setSupervisorDepartmentNumber(resultSet.getString("상사번호"));
                     employee.setDepartmentNumber(resultSet.getString("부서번호"));
-
+                    employees.add(employee);
                 }
 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return employee;
+        return employees;
     }
     @Override
     public Employee saveEmployee(Employee employee){

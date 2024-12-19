@@ -1,5 +1,6 @@
 package com.dw.jdbcapp.service;
 
+import com.dw.jdbcapp.exception.InvalidRequestException;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.repository.iface.ProductRepository;
 import com.dw.jdbcapp.repository.jdbc.ProductJdbcRepository;
@@ -21,9 +22,11 @@ public class ProductService {
     }
 
     public Product getProductById(int id) {
+        if (id < 0) {
+            throw new InvalidRequestException("존재하지 않는 제품번호:" + id);
+        }
         return productRepository.getProductById(id);
     }
-
     // Post(insert)
     public Product saveProduct(Product product) {
         return productRepository.saveProduct(product);

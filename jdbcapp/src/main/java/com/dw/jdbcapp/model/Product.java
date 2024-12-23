@@ -7,6 +7,7 @@ public class Product {
     private double unitPrice;
     private int stock;
 
+
     public Product() {
     }
 
@@ -16,7 +17,10 @@ public class Product {
         this.packagingUnit = packagingUnit;
         this.unitPrice = unitPrice;
         this.stock = stock;
+
     }
+
+
 
     public int getProductNumber() {
         return productNumber;

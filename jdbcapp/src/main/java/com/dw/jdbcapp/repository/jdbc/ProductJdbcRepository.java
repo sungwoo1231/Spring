@@ -123,4 +123,17 @@ public class ProductJdbcRepository implements ProductRepository {
         }
         return id;
     }
+
+    @Override
+    public String updateProductWithStock(int id, int stock) {
+        return "";
+    }
+
+    @Override
+    public List<Product> getProductByProductName(String name) {
+
+        return List.of();
+    }
+
+
 }

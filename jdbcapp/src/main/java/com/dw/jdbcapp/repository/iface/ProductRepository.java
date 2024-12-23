@@ -14,4 +14,8 @@ public interface  ProductRepository {
     Product updateProduct(Product product);
 
     String deleteProduct(String id);
+
+    String updateProductWithStock(int id, int stock);
+
+    List<Product> getProductByProductName(String name);
 }

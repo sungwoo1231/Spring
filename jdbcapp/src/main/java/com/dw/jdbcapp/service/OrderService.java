@@ -48,5 +48,8 @@ public class OrderService {
     public List<Map<String,Double>> getTopCitiesByTotalOrderAmount(int limit){
         return orderRepository.getTopCitiesByTotalOrderAmount(limit);
     }
+    public List<Map<String,Double>> getOrderCountByYearForCity(String city){
+        return orderRepository.getOrderCountByYearForCity(city);
+    }
 
 }

@@ -16,4 +16,6 @@ public interface OrderRepository {
 
     String updateOrderWithShippingDate(String id,String date);
     List<Map<String,Double>> getTopCitiesByTotalOrderAmount(int limit);
+
+    List<Map<String, Double>> getOrderCountByYearForCity(String city);
 }

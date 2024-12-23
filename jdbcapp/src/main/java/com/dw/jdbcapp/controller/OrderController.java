@@ -56,5 +56,9 @@ public class OrderController {
     public ResponseEntity <List<Map<String,Double>>> getTopCitiesByTotalOrderAmount(@PathVariable int limit){
         return new ResponseEntity<>(orderService.getTopCitiesByTotalOrderAmount(limit),HttpStatus.OK);
     }
+    @GetMapping("/api/orders/ordercount/year/{city}")
+    public ResponseEntity  <List<Map<String,Double>>> getOrderCountByYearForCity(@PathVariable String city){
+        return new ResponseEntity<>(orderService.getOrderCountByYearForCity(city),HttpStatus.OK);
+    }
 
 }

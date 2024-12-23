@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -88,4 +89,23 @@ public class ProductTemplateRepository implements ProductRepository {
         jdbcTemplate.update(query,id);
         return id;
     }
+
+    @Override
+    public String updateProductWithStock(int id, int stock) {
+        String query = "update 제품 set 재고 =? where 제품번호=? ";
+        jdbcTemplate.update(query, stock , id);
+        return "성공";
+    }
+
+    @Override
+    public List<Product> getProductByProductName(String name) {
+        String query = "select * from 제품 where 제품명 like ? ";
+        String name1 = "%" + name + " %" ;
+
+        return jdbcTemplate.query(query,productRowMapper,name1);
+
+
+    }
+
+
 }

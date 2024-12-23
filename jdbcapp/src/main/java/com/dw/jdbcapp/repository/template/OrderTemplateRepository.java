@@ -35,11 +35,19 @@ public class OrderTemplateRepository implements OrderRepository {
             return order;
         }
     };
+    private final RowMapper<Map<String, Double>> orderRowMapper1 = new RowMapper<Map<String, Double>>() {
+        @Override
+        public Map<String, Double> mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Map<String, Double> map = new HashMap<>();
+            map.put(rs.getString("주문년도"), rs.getDouble("주문건수"));
+            return map;
+        }
+    };
 
     @Override
     public List<Order> getAllOrders() {
         String query = "select * from 주문 ";
-        return jdbcTemplate.query(query,orderRowMapper);
+        return jdbcTemplate.query(query, orderRowMapper);
     }
 
     @Override
@@ -47,9 +55,9 @@ public class OrderTemplateRepository implements OrderRepository {
         String query = "select * from 주문 where 주문번호 = ?";
         try {
             return jdbcTemplate.queryForObject(query, orderRowMapper, id);
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(
-                    "주문번호가 올바르지 않습니다."+ id);
+                    "주문번호가 올바르지 않습니다." + id);
         }
     }
 
@@ -64,9 +72,10 @@ public class OrderTemplateRepository implements OrderRepository {
                     "입력하신 제품번호와 고객번호가 올바르지 않습니다 " + number + " " + id);
         }
     }
+
     @Override
     public int saveOrder(Order order) {
-        String query = "insert into 주문(주문번호,고객번호,사원번호,주문일,요청일)"+
+        String query = "insert into 주문(주문번호,고객번호,사원번호,주문일,요청일)" +
                 "values(?,?,?,?,?)";
         return jdbcTemplate.update(query,
                 order.getOrderId(),
@@ -77,33 +86,43 @@ public class OrderTemplateRepository implements OrderRepository {
     }
 
     @Override
-    public String  updateOrderWithShippingDate(String id, String date) {
+    public String updateOrderWithShippingDate(String id, String date) {
         String query = "update 주문 set 발송일 =? where 주문번호=? ";
-        jdbcTemplate.update(query,date,id);
+        jdbcTemplate.update(query, date, id);
         return date;
     }
 
     @Override
-    public List<Map<String,Double>> getTopCitiesByTotalOrderAmount(int limit) {
-        String query = "select 도시, sum(단가*주문수량) as 주문금액합 "+
-                "from 주문 "+
-                " inner join 고객 "+
-                "on 주문.고객번호 = 고객.고객번호 "+
-                " inner join 주문세부 "+
-                " on 주문.주문번호 = 주문세부.주문번호 "+
-                " group by 도시 "+
-                " order by 주문금액합 desc "+
-                " limit  ? " ;
+    public List<Map<String, Double>> getTopCitiesByTotalOrderAmount(int limit) {
+        String query = "select 도시, sum(단가*주문수량) as 주문금액합 " +
+                "from 주문 " +
+                " inner join 고객 " +
+                "on 주문.고객번호 = 고객.고객번호 " +
+                " inner join 주문세부 " +
+                " on 주문.주문번호 = 주문세부.주문번호 " +
+                " group by 도시 " +
+                " order by 주문금액합 desc " +
+                " limit  ? ";
 
-        return jdbcTemplate.query(query, (rs,rowNum) -> {
+        return jdbcTemplate.query(query, (rs, rowNum) -> {
             Map<String, Double> order = new HashMap<>();
 
             String city = rs.getString("도시");
             System.out.println("도시: " + city);
-            order.put("주문금액합",rs.getDouble("주문금액합"));
+            order.put("주문금액합", rs.getDouble("주문금액합"));
             return order;
         }, limit);
     }
 
+
+
+    @Override
+    public List<Map<String,Double>> getOrderCountByYearForCity(String city){
+        String query = " select year (주문일) as 주문년도, count(주문번호) as 주문건수\n " +
+                " from 주문\n " +
+                " where 고객번호 in (select 고객번호 from 고객 where 고객.도시 = ? )\n " +
+                " group by 주문년도 " ;
+        return jdbcTemplate.query(query,orderRowMapper1,city);
+}
 
 }

@@ -63,12 +63,8 @@ public class ProductService {
         return productRepository.getProductByProductName(name);
     }
 
-    public void temp() {
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setProductId(0);
-        productDTO.setProductName("");
-        productDTO.setUnitPrice(0);
-        productDTO.setStock(0);
-        productDTO.setStockValue(productDTO.getStock()* productDTO.getUnitPrice());
+
+
+    public ProductDTO getProductsByStockValue(ProductDTO productDTO) {
     }
 }

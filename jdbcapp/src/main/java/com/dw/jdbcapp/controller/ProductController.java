@@ -1,5 +1,6 @@
 package com.dw.jdbcapp.controller;
 
+import com.dw.jdbcapp.dto.ProductDTO;
 import com.dw.jdbcapp.model.Employee;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.service.ProductService;
@@ -65,6 +66,8 @@ public class ProductController {
         return new ResponseEntity<>(productControllerService.getProductByProductName(name),HttpStatus.OK);
     }
     @GetMapping("/api/products/stockvalue")
-    public ResponseEntity<>
+    public ResponseEntity<ProductDTO> getProductsByStockValue(@RequestBody ProductDTO productDTO){
+        return new ResponseEntity<>(productControllerService.getProductsByStockValue(productDTO),HttpStatus.OK);
+    }
 
 }

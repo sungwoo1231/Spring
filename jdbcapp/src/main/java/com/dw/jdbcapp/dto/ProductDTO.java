@@ -61,14 +61,6 @@ public class ProductDTO {
     public void setStock(int stock) {
         this.stock = stock;
     }
-    public Product toProduct(){
-        Product product = new Product();
-        product.setProductNumber(this.productId);
-        product.setProductName(this.productName);
-        product.setUnitPrice(this.unitPrice);
-        product.setStock(this.stock);
-        return product;
-    }
     public ProductDTO fromProduct(Product product){
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProductId(0);

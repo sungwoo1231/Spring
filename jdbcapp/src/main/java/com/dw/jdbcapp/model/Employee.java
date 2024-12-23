@@ -3,7 +3,7 @@ package com.dw.jdbcapp.model;
 import java.time.LocalDate;
 
 public class Employee {
-    private String employeeNumber;
+    private String employeeNum;
     private String name;
     private String englishName;
     private String position;
@@ -13,14 +13,15 @@ public class Employee {
     private String address;
     private String city;
     private String area;
-    private String homePhoneNumber;
-    private String supervisorDepartmentNumber;
-    private String departmentNumber;
+    private String homeNum;
+    private String supervisorNum;
+    private String departmentNum;
 
-    public Employee(String employeeNumber, String name, String englishName, String position, String gender, LocalDate birthday,
-                    LocalDate dateOfEmployment, String address, String city, String area, String homePhoneNumber,
-                    String supervisorDepartmentNumber, String departmentNumber) {
-        this.employeeNumber = employeeNumber;
+    public Employee() {
+    }
+
+    public Employee(String employeeNum, String name, String englishName, String position, String gender, LocalDate birthday, LocalDate dateOfEmployment, String address, String city, String area, String homeNum, String supervisorNum, String departmentNum) {
+        this.employeeNum = employeeNum;
         this.name = name;
         this.englishName = englishName;
         this.position = position;
@@ -30,20 +31,17 @@ public class Employee {
         this.address = address;
         this.city = city;
         this.area = area;
-        this.homePhoneNumber = homePhoneNumber;
-        this.supervisorDepartmentNumber = supervisorDepartmentNumber;
-        this.departmentNumber = departmentNumber;
+        this.homeNum = homeNum;
+        this.supervisorNum = supervisorNum;
+        this.departmentNum = departmentNum;
     }
 
-    public Employee() {
+    public String getEmployeeNum() {
+        return employeeNum;
     }
 
-    public String getEmployeeNumber()  {
-        return employeeNumber;
-    }
-
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
+    public void setEmployeeNum(String employeeNum) {
+        this.employeeNum = employeeNum;
     }
 
     public String getName() {
@@ -90,7 +88,6 @@ public class Employee {
         return dateOfEmployment;
     }
 
-
     public void setDateOfEmployment(LocalDate dateOfEmployment) {
         this.dateOfEmployment = dateOfEmployment;
     }
@@ -119,35 +116,34 @@ public class Employee {
         this.area = area;
     }
 
-    public String getHomePhoneNumber() {
-        return homePhoneNumber;
+    public String getHomeNum() {
+        return homeNum;
     }
 
-    public void setHomePhoneNumber(String homePhoneNumber) {
-        this.homePhoneNumber = homePhoneNumber;
+    public void setHomeNum(String homeNum) {
+        this.homeNum = homeNum;
     }
 
-    public String getSupervisorDepartmentNumber() {
-        return supervisorDepartmentNumber;
+    public String getSupervisorNum() {
+        return supervisorNum;
     }
 
-    public void setSupervisorDepartmentNumber(String supervisorDepartmentNumber) {
-        this.supervisorDepartmentNumber = supervisorDepartmentNumber;
+    public void setSupervisorNum(String supervisorNum) {
+        this.supervisorNum = supervisorNum;
     }
 
-    public String getDepartmentNumber() {
-        return departmentNumber;
+    public String getDepartmentNum() {
+        return departmentNum;
     }
 
-    public void setDepartmentNumber(String departmentNumber) {
-        this.departmentNumber = departmentNumber;
+    public void setDepartmentNum(String departmentNum) {
+        this.departmentNum = departmentNum;
     }
 
     @Override
-    public String
-    toString() {
+    public String toString() {
         return "Employee{" +
-                "employeeNumber='" + employeeNumber + '\'' +
+                "employeeNum='" + employeeNum + '\'' +
                 ", name='" + name + '\'' +
                 ", englishName='" + englishName + '\'' +
                 ", position='" + position + '\'' +
@@ -157,9 +153,9 @@ public class Employee {
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
-                ", homePhoneNumber='" + homePhoneNumber + '\'' +
-                ", supervisorDepartmentNumber='" + supervisorDepartmentNumber + '\'' +
-                ", departmentNumber='" + departmentNumber + '\'' +
+                ", homeNum='" + homeNum + '\'' +
+                ", supervisorNum='" + supervisorNum + '\'' +
+                ", departmentNum='" + departmentNum + '\'' +
                 '}';
     }
 }

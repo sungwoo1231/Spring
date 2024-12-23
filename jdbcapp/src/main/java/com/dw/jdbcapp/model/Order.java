@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Order {
     private String orderId;
-    private String customerId;
+    private  String customerId;
     private String employeeId;
     private LocalDate orderDate;
     private LocalDate requestDate;

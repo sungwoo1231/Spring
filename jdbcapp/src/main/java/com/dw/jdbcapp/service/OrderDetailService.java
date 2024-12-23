@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 public class OrderDetailService {
     @Autowired
-            @Qualifier("orderDetailTemplateRepository")
+    @Qualifier("orderDetailTemplateRepository")
     OrderDetailRepository orderDetailRepository;
 
-   public List<OrderDetail> getAllOrderDetails(){
-       return orderDetailRepository.getAllOrderDetails();
-   }
+    public List<OrderDetail> getAllOrderDetails(){
+        return orderDetailRepository.getAllOrderDetails();
+    }
 }

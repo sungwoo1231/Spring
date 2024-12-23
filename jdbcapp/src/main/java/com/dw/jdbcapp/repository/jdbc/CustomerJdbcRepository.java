@@ -46,9 +46,49 @@ public class  CustomerJdbcRepository implements CustomerRepository {
 
                 customers.add(customer);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace(); // 예외가 발생하는 과정의 정보를 출력
         }
         return customers;
     }
+
+    @Override
+    public List<Customer> getCustomersWithHighMileThanAvg() {
+        List<Customer> customers = new ArrayList<>();
+        String query = "select * from 고객 " +
+                "where  마일리지 > (select avg(마일리지) from 고객);" ;
+        try (
+                Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(query)) {
+            System.out.println("데이터베이스 연결 성공");
+            // 조회 결과가 result에 담겨있음
+            // resultSet으로부터 데이터를 꺼내서 Customer 클래스의 인스턴스에 저장
+            // 생성된 인스턴스들은 List<Customer>에 추가해야 함
+            while (resultSet.next()) {
+                Customer customer = new Customer();
+
+                customer.setCustomerId(resultSet.getString("고객번호"));
+                customer.setCompanyName(resultSet.getString("고객회사명"));
+                customer.setContactName(resultSet.getString("담당자명"));
+                customer.setContactTitle(resultSet.getString("담당자직위"));
+                customer.setAddress(resultSet.getString("주소"));
+                customer.setCity(resultSet.getString("도시"));
+                customer.setRegion(resultSet.getString("지역"));
+                customer.setPhone(resultSet.getString("전화번호"));
+                customer.setMileage(resultSet.getInt("마일리지"));
+
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // 예외가 발생하는 과정의 정보를 출력
+        }
+        return customers;
+    }
+
+    @Override
+    public List<Customer> getCustomersByMileageGrade(String grade) {
+        return List.of();
+    }
+
 }

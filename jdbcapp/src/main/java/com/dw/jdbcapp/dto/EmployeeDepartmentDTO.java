@@ -1,5 +1,6 @@
 package com.dw.jdbcapp.dto;
 
+
 import java.time.LocalDate;
 
 public class EmployeeDepartmentDTO {
@@ -41,8 +42,7 @@ public class EmployeeDepartmentDTO {
     }
 
     @Override
-    public String toString(){
-        return this.hireDate + ", " + this.departmentName + ", " +
-                this.employeeName;
+    public String toString() {
+        return this.hireDate + " " + this.departmentName + " " + this.employeeName;
     }
 }

@@ -1,6 +1,6 @@
 package com.dw.jdbcapp.model;
 
-public class  Customer {
+public class Customer {
     private String customerId; // 고객번호
     private String companyName; // 고객회사명
     private String contactName; // 담당자명

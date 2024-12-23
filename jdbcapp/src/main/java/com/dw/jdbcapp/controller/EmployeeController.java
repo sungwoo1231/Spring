@@ -25,13 +25,14 @@ public class EmployeeController {
     public ResponseEntity<Employee> getEmployeeById(@RequestParam String id){
         return new ResponseEntity<>(employeeService.getEmployeeById(id),HttpStatus.OK);
     }
+
     // Path Parameters (경로 매개변수)
     @GetMapping("/employee/{id}")
     public ResponseEntity<Employee> getEmployeeById_2(@PathVariable String id){
         return new ResponseEntity<>(employeeService.getEmployeeById(id),HttpStatus.OK);
     }
 
-   @GetMapping("/employee/department")
+    @GetMapping("/employee/department")
     public ResponseEntity<List<Map<String, Object>>> getEmployeesWithDepartName(){
         return new ResponseEntity<>(employeeService.getEmployeesWithDepartName(),HttpStatus.OK);
     }
@@ -39,16 +40,14 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDepartmentDTO>> getEmployeesWithDepartName2(){
         return new ResponseEntity<>(employeeService.getEmployeesWithDepartName2(),HttpStatus.OK);
     }
-
     // Path Parameters (경로 매개변수)
     @GetMapping("/api/employees/{id}/{position}")
     public ResponseEntity<List<Employee>> getDepartmentById_3(@PathVariable String id, @PathVariable String position){
-        return new ResponseEntity<>(employeeService.getEmployeeById_3(id, position),HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getEmployeeById_3(id,position),HttpStatus.OK);
     }
-
     // Query Parameters (쿼리문자열)
     @GetMapping("/api/employees")
-    public ResponseEntity <List<Employee>> getDepartmentById_4(@RequestParam String id, @RequestParam String position){
+    public ResponseEntity<List<Employee>> getDepartmentById_4(@RequestParam String id, @RequestParam String position){
         return new ResponseEntity<>(employeeService.getEmployeeById_3(id,position),HttpStatus.OK);
     }
 
@@ -57,5 +56,8 @@ public class EmployeeController {
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee){
         return new ResponseEntity<>(employeeService.saveEmployee(employee),HttpStatus.CREATED);
     }
-
+    @GetMapping("/employees/hiredate/{hiredate}")
+    public ResponseEntity <List<Employee>> getEmployeesByHiredate(@PathVariable String hiredate){
+        return new ResponseEntity<>(employeeService.getEmployeesByHiredate(hiredate),HttpStatus.OK);
+    }
 }

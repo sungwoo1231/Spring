@@ -24,11 +24,11 @@ public class OrderDetailJdbcRepository implements OrderDetailRepository {
                 ResultSet resultSet = statement.executeQuery(query)) {
             System.out.println("데이터베이스 연결 성공");
             while (resultSet.next()) {
-               OrderDetail orderDetail = new OrderDetail();
+                OrderDetail orderDetail = new OrderDetail();
 
-                orderDetail.setOrderNumber(resultSet.getString("주문번호"));
-                orderDetail.setProductNumber(resultSet.getInt("제품번호"));
-                orderDetail.setUnitPrice(resultSet.getDouble("단가"));
+                orderDetail.setOrderId(resultSet.getString("주문번호"));
+                orderDetail.setProductNum(resultSet.getInt("제품번호"));
+                orderDetail.setPrice(resultSet.getDouble("단가"));
                 orderDetail.setOrderQuantity(resultSet.getInt("주문수량"));
                 orderDetail.setDiscountRate(resultSet.getDouble("할인율"));
                 orderDetails.add(orderDetail);
@@ -36,7 +36,11 @@ public class OrderDetailJdbcRepository implements OrderDetailRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return orderDetails; 
-    }
+        return orderDetails;
     }
 
+    @Override
+    public int saveOrderDetail(OrderDetail orderDetail) {
+        return 0;
+    }
+}

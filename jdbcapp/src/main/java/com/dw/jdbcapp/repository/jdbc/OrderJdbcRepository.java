@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OrderJdbcRepository implements OrderRepository {
@@ -75,11 +76,29 @@ public class OrderJdbcRepository implements OrderRepository {
         }
         return order;
     }
+
+
     @Override
-    public Order getOrderById_2(String number,String id ) {
+    public int saveOrder(Order order) {
+        return 0;
+    }
+
+    @Override
+    public String updateOrderWithShippingDate(String id, String date) {
+        return "";
+    }
+
+    @Override
+    public List<Map<String, Double>> getTopCitiesByTotalOrderAmount(int limit) {
+        return List.of();
+    }
 
 
-        Order order = new Order();
+    @Override
+    public List<Order> getOrderById_2(int number,String id ) {
+
+
+        List<Order> orders = new ArrayList<>();
 
         String query = "select * from 주문 "
                 + "inner join 주문세부 on 주문.주문번호 = 주문세부.주문번호 "+
@@ -92,10 +111,12 @@ public class OrderJdbcRepository implements OrderRepository {
              PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             System.out.println("데이터베이스 연결 성공");
-            pstmt.setString(1, number);
+            pstmt.setInt(1, number);
             pstmt.setString(2,id);
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 while (resultSet.next()) {
+                    Order order = new Order();
+
 
 
                     order.setOrderId(resultSet.getString("주문번호"));
@@ -111,6 +132,6 @@ public class OrderJdbcRepository implements OrderRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return order;
+        return orders;
     }
 }

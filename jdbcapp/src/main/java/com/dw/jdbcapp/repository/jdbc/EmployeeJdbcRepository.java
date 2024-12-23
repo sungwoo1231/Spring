@@ -27,7 +27,7 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
             while (resultSet.next()) {
                 Employee employee = new Employee();
 
-                employee.setEmployeeNumber(resultSet.getString("사원번호"));
+                employee.setEmployeeNum(resultSet.getString("사원번호"));
                 employee.setName(resultSet.getString("이름"));
                 employee.setEnglishName(resultSet.getString("영문이름"));
                 employee.setPosition(resultSet.getString("직위"));
@@ -37,9 +37,9 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
                 employee.setAddress(resultSet.getString("주소"));
                 employee.setArea(resultSet.getString("지역"));
                 employee.setCity(resultSet.getString("도시"));
-                employee.setHomePhoneNumber(resultSet.getString("집전화"));
-                employee.setSupervisorDepartmentNumber(resultSet.getString("상사번호"));
-                employee.setDepartmentNumber(resultSet.getString("부서번호"));
+                employee.setHomeNum(resultSet.getString("집전화"));
+                employee.setSupervisorNum(resultSet.getString("상사번호"));
+                employee.setDepartmentNum(resultSet.getString("부서번호"));
 
                 employees.add(employee);
             }
@@ -63,7 +63,7 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
                 while (resultSet.next()) {
 
 
-                    employee.setEmployeeNumber(resultSet.getString("사원번호"));
+                    employee.setEmployeeNum(resultSet.getString("사원번호"));
                     employee.setName(resultSet.getString("이름"));
                     employee.setEnglishName(resultSet.getString("영문이름"));
                     employee.setPosition(resultSet.getString("직위"));
@@ -73,10 +73,9 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
                     employee.setAddress(resultSet.getString("주소"));
                     employee.setArea(resultSet.getString("지역"));
                     employee.setCity(resultSet.getString("도시"));
-                    employee.setHomePhoneNumber(resultSet.getString("집전화"));
-                    employee.setSupervisorDepartmentNumber(resultSet.getString("상사번호"));
-                    employee.setDepartmentNumber(resultSet.getString("부서번호"));
-
+                    employee.setHomeNum(resultSet.getString("집전화"));
+                    employee.setSupervisorNum(resultSet.getString("상사번호"));
+                    employee.setDepartmentNum(resultSet.getString("부서번호"));
                 }
 
             }
@@ -113,11 +112,9 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
     }
     @Override
     public List<Employee> getDepartmentById_3(String id, String position) {
-
         List<Employee> employees = new ArrayList<>();
 
-        String query =
-                "select * from 사원 where 부서번호 = ? and 직위 = ?";
+        String query = "select * from 사원 where 부서번호 = ? and 직위 = ?";
         try (Connection connection = DriverManager.getConnection(
                 URL, USER, PASSWORD);
              PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -129,7 +126,7 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
                 while (resultSet.next()) {
                     Employee employee = new Employee();
 
-                    employee.setEmployeeNumber(resultSet.getString("사원번호"));
+                    employee.setEmployeeNum(resultSet.getString("사원번호"));
                     employee.setName(resultSet.getString("이름"));
                     employee.setEnglishName(resultSet.getString("영문이름"));
                     employee.setPosition(resultSet.getString("직위"));
@@ -139,9 +136,10 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
                     employee.setAddress(resultSet.getString("주소"));
                     employee.setArea(resultSet.getString("지역"));
                     employee.setCity(resultSet.getString("도시"));
-                    employee.setHomePhoneNumber(resultSet.getString("집전화"));
-                    employee.setSupervisorDepartmentNumber(resultSet.getString("상사번호"));
-                    employee.setDepartmentNumber(resultSet.getString("부서번호"));
+                    employee.setHomeNum(resultSet.getString("집전화"));
+                    employee.setSupervisorNum(resultSet.getString("상사번호"));
+                    employee.setDepartmentNum(resultSet.getString("부서번호"));
+
                     employees.add(employee);
                 }
 
@@ -151,13 +149,14 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
         }
         return employees;
     }
+
     @Override
     public Employee saveEmployee(Employee employee){
         String query = "insert into 사원(사원번호,이름,영문이름,직위,성별,생일,입사일,주소,도시,지역,집전화,상사번호,부서번호) "
                 + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " ;
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1,employee.getEmployeeNumber());
+            pstmt.setString(1,employee.getEmployeeNum());
             pstmt.setString(2,employee.getName());
             pstmt.setString(3,employee.getEnglishName());
             pstmt.setString(4,employee.getPosition());
@@ -167,9 +166,9 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
             pstmt.setString(8,employee.getAddress());
             pstmt.setString(9,employee.getCity());
             pstmt.setString(10,employee.getArea());
-            pstmt.setString(11,employee.getHomePhoneNumber());
-            pstmt.setString(12,employee.getSupervisorDepartmentNumber());
-            pstmt.setString(13,employee.getDepartmentNumber());
+            pstmt.setString(11,employee.getHomeNum());
+            pstmt.setString(12,employee.getSupervisorNum());
+            pstmt.setString(13,employee.getDepartmentNum());
 
             pstmt.executeUpdate();
             System.out.println("INSERT 성공");
@@ -180,14 +179,14 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
         // 성공이면 해당 객체를 리턴함
         return employee;
     }
+
+    @Override
+    public List<Employee> getEmployeesByHiredate(String hiredate) {
+        return List.of();
     }
 
-
-
-
-
-
-
-
-
-
+    @Override
+    public List<Employee> getEmployeesByHiredate1() {
+        return List.of();
+    }
+}

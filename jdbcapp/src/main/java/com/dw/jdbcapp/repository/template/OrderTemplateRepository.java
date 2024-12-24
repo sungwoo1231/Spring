@@ -35,14 +35,7 @@ public class OrderTemplateRepository implements OrderRepository {
             return order;
         }
     };
-    private final RowMapper<Map<String, Double>> orderRowMapper1 = new RowMapper<Map<String, Double>>() {
-        @Override
-        public Map<String, Double> mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Map<String, Double> map = new HashMap<>();
-            map.put(rs.getString("주문년도"), rs.getDouble("주문건수"));
-            return map;
-        }
-    };
+
 
     @Override
     public List<Order> getAllOrders() {
@@ -105,16 +98,22 @@ public class OrderTemplateRepository implements OrderRepository {
                 " limit  ? ";
 
         return jdbcTemplate.query(query, (rs, rowNum) -> {
-            Map<String, Double> order = new HashMap<>();
+            Map<String, Double> map = new HashMap<>();
 
-            String city = rs.getString("도시");
-            System.out.println("도시: " + city);
-            order.put("주문금액합", rs.getDouble("주문금액합"));
-            return order;
+           map.put(rs.getString("도시"),
+                   rs.getDouble("주문금액합"));
+            return map;
         }, limit);
     }
 
-
+    private final RowMapper<Map<String, Double>> orderRowMapper1 = new RowMapper<Map<String, Double>>() {
+        @Override
+        public Map<String, Double> mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Map<String, Double> map = new HashMap<>();
+            map.put(rs.getString("주문년도"), rs.getDouble("주문건수"));
+            return map;
+        }
+    };
 
     @Override
     public List<Map<String,Double>> getOrderCountByYearForCity(String city){

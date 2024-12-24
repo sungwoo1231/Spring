@@ -1,5 +1,6 @@
 package com.dw.jdbcapp.repository.jdbc;
 
+import com.dw.jdbcapp.dto.ProductDTO;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.repository.iface.ProductRepository;
 import org.springframework.stereotype.Repository;
@@ -134,6 +135,12 @@ public class ProductJdbcRepository implements ProductRepository {
 
         return List.of();
     }
+
+    @Override
+    public List<Product> getProductsByStockValue() {
+        return List.of();
+    }
+
 
 
 }

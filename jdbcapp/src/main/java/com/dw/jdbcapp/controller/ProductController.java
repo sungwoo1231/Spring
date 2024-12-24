@@ -66,8 +66,8 @@ public class ProductController {
         return new ResponseEntity<>(productControllerService.getProductByProductName(name),HttpStatus.OK);
     }
     @GetMapping("/api/products/stockvalue")
-    public ResponseEntity<ProductDTO> getProductsByStockValue(@RequestBody ProductDTO productDTO){
-        return new ResponseEntity<>(productControllerService.getProductsByStockValue(productDTO),HttpStatus.OK);
+    public ResponseEntity<List<ProductDTO>> getProductsByStockValue(){
+        return new ResponseEntity<>(productControllerService.getProductsByStockValue(),HttpStatus.OK);
     }
 
 }

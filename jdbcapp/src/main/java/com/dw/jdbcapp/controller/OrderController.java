@@ -42,10 +42,8 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getOrderById_2(number,id),HttpStatus.OK);
     }
     @PostMapping("/orders")
-    public ResponseEntity<OrderRequestDTO> saveOrder(
-            @RequestBody OrderRequestDTO orderRequestDTO){
-        return new ResponseEntity<>(
-                orderService.saveOrder(orderRequestDTO),HttpStatus.CREATED);
+    public ResponseEntity<OrderRequestDTO> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO){
+        return new ResponseEntity<>(orderService.saveOrder(orderRequestDTO),HttpStatus.CREATED);
     }
     @PutMapping("/api/orders/update")
     public ResponseEntity<String> updateOrderWithShippingDate(@RequestParam String id,@RequestParam String date){
@@ -59,6 +57,11 @@ public class OrderController {
     @GetMapping("/api/orders/ordercount/year/{city}")
     public ResponseEntity  <List<Map<String,Double>>> getOrderCountByYearForCity(@PathVariable String city){
         return new ResponseEntity<>(orderService.getOrderCountByYearForCity(city),HttpStatus.OK);
+    }
+    @PostMapping("/post/orders")
+    public ResponseEntity<OrderRequestDTO> getSaveOrder(@RequestBody OrderRequestDTO orderRequestDTO){
+        return new ResponseEntity<>(
+                orderService.getSaveOrder(orderRequestDTO),HttpStatus.OK);
     }
 
 }

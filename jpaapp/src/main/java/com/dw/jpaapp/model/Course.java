@@ -33,7 +33,7 @@ public class Course {
 
     @ManyToMany
     @JoinTable(name = "course_student",
-            joinColumns = @JoinColumn(name = "coruse_id"),
+            joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> studentList = new ArrayList<>();
 }

@@ -1,10 +1,9 @@
 package com.dw.jpaapp.model;
 
+import com.dw.jpaapp.dto.CourseDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jdk.dynalink.linker.LinkerServices;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "course")
 public class Course {
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "title",nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
@@ -36,4 +36,12 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> studentList = new ArrayList<>();
+
+    // CourseDTO 매핑 메서드
+    public CourseDTO toDTO() {
+        List<Long> studentIds = studentList.stream()
+                .map(Student::getId).toList();
+        return new CourseDTO(this.id, this.title, this.description,
+                this.instructor_fk.getId(), studentIds);
+    }
 }

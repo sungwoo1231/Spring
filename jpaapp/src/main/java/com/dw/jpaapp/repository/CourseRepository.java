@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
-   // @Query("select c from Course c where c.title = :title")
-    List<Course> findByTitleLike(String title);
+    List<Course> findByTitleLike(String title); // 메서드 쿼리
 
 }

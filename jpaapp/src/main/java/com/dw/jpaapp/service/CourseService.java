@@ -9,6 +9,7 @@ import com.dw.jpaapp.model.Student;
 import com.dw.jpaapp.repository.CourseRepository;
 import com.dw.jpaapp.repository.InstructorRepository;
 import com.dw.jpaapp.repository.StudentRepository;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +24,39 @@ public class CourseService {
     CourseRepository courseRepository;
     @Autowired
     InstructorRepository instructorRepository;
+    @Autowired
+    StudentRepository studentRepository;
 
 
     public List<CourseDTO> getAllCourses() {
         return courseRepository.findAll().stream().map(Course::toDTO)
                 .collect(Collectors.toList());
     }
-    public List<CourseDTO> getCoursesLike(String title){
-        String title1 = "%" + title + "%";
-        return courseRepository.findByTitleLike(title1).stream().map(Course::toDTO).toList();
 
+    public List<CourseDTO> getCoursesLike(String title) {
+        return courseRepository.findByTitleLike( "%" +title + "%").stream().map(Course::toDTO).toList();
 
-        }
-        public CourseDTO saveCourse(){
+    }
+
+    public CourseDTO saveCourse(CourseDTO courseDTO) {
         Course course = new Course();
-        course.setTitle(course.getTitle());
+        course.setTitle(courseDTO.getTitle());
+        course.setDescription(courseDTO.getDescription());
+        course.setInstructor_fk(instructorRepository.findById(courseDTO.getInstructorId())
+                .orElseThrow(()->new RuntimeException("No instructor")));
+
+//        Instructor instructor = instructorRepository
+//                .findById(courseDTO.getInstructorId())
+//                .orElseThrow(()->new RuntimeException("No instructor"));
+//        course.setInstructor_fk(instructor);
+
+        List<Student> students = new ArrayList<>();
+        for (Long id : courseDTO.getStudentIds()) {
+            students.add(studentRepository.findById(id)
+                    .orElseThrow(()->new RuntimeException("No student")));
         }
-  }
+        course.setStudentList(students);
+
+        return courseRepository.save(course).toDTO();
+    }
+}

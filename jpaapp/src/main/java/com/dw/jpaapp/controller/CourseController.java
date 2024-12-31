@@ -27,7 +27,7 @@ public class CourseController {
         return new ResponseEntity<>(courseService.getCoursesLike(title),HttpStatus.OK);
     }
     @PostMapping("/course/save")
-    public ResponseEntity <CourseDTO> saveCourse(){
-        return new ResponseEntity<>(courseService.saveCourse,HttpStatus.CREATED);
+    public ResponseEntity <CourseDTO> saveCourse(@RequestBody CourseDTO courseDTO){
+        return new ResponseEntity<>(courseService.saveCourse(courseDTO),HttpStatus.CREATED);
     }
 }

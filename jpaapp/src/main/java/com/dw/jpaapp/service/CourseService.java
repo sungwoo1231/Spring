@@ -34,29 +34,21 @@ public class CourseService {
     }
 
     public List<CourseDTO> getCoursesLike(String title) {
-        return courseRepository.findByTitleLike( "%" +title + "%").stream().map(Course::toDTO).toList();
+        return courseRepository.findByTitleLike("%" + title + "%").stream().map(Course::toDTO).toList();
 
     }
-
-    public CourseDTO saveCourse(CourseDTO courseDTO) {
-        Course course = new Course();
-        course.setTitle(courseDTO.getTitle());
-        course.setDescription(courseDTO.getDescription());
-        course.setInstructor_fk(instructorRepository.findById(courseDTO.getInstructorId())
-                .orElseThrow(()->new RuntimeException("No instructor")));
-
-//        Instructor instructor = instructorRepository
-//                .findById(courseDTO.getInstructorId())
-//                .orElseThrow(()->new RuntimeException("No instructor"));
-//        course.setInstructor_fk(instructor);
-
-        List<Student> students = new ArrayList<>();
-        for (Long id : courseDTO.getStudentIds()) {
-            students.add(studentRepository.findById(id)
-                    .orElseThrow(()->new RuntimeException("No student")));
+    // 과제5-2. 과목 정보를 새로 저장
+        public CourseDTO saveCourse (CourseDTO courseDTO){
+            Course course = new Course();
+            course.setTitle(courseDTO.getTitle());
+            course.setDescription(courseDTO.getDescription());
+            course.setInstructor_fk(instructorRepository.findById(courseDTO.getInstructorId())
+                    .orElseThrow(() -> new RuntimeException("No instructor")));
+            course.setStudentList(courseDTO.getStudentIds().stream()
+                    .map(id -> studentRepository.findById(id))
+                    .map(optional -> optional.orElseThrow(() -> new RuntimeException("No Student")))
+                    .toList()
+            );
+            return courseRepository.save(course).toDTO();
         }
-        course.setStudentList(students);
-
-        return courseRepository.save(course).toDTO();
     }
-}

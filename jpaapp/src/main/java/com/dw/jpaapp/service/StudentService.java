@@ -1,6 +1,7 @@
 package com.dw.jpaapp.service;
 
 import com.dw.jpaapp.dto.StudentDTO;
+import com.dw.jpaapp.dto.StudentSummaryDTO;
 import com.dw.jpaapp.model.Course;
 import com.dw.jpaapp.model.Student;
 import com.dw.jpaapp.repository.CourseRepository;
@@ -51,16 +52,32 @@ public class StudentService {
         Student student = new Student();
         student.setName(studentDTO.getName());
         student.setEmail(studentDTO.getEmail());
-        List<Course> courseList = new ArrayList<>();
-        for (Long id : studentDTO.getCourseIds()) {
-            Optional<Course> courseOptional = courseRepository.findById(id);
-            if (courseOptional.isPresent()){
-                Course course = courseOptional.get();
-                course.getStudentList().add(student);
-                courseList.add(course);
-            }
-        }
-        student.setCourseList(courseList);
+        student.setCourseList(studentDTO.getCourseIds().stream()
+                .map(id->courseRepository.findById(id))
+                .map(optional->optional.orElseThrow(()->new RuntimeException("No course")))
+                .peek(course->course.getStudentList().add(student))
+                .toList());
         return studentRepository.save(student).toDTO();
+    }
+
+    // 과제5-6. 전체 학생의 학생ID, 학생이름, 강의명, 강사이름을 DTO로 만들어서 조회
+    public List<StudentSummaryDTO> getStudentSummary() {
+        return studentRepository.getStudentSummary();
+    }
+
+
+    public List<StudentSummaryDTO> getStudentSummaryNativeSQL() {
+        List<Object[]> objects = studentRepository.getStudentSummaryNativeSQL();
+        List<StudentSummaryDTO> studentSummaryDTOS = new ArrayList<>();
+        for (Object[] data : objects) {
+            StudentSummaryDTO studentSummaryDTO = new StudentSummaryDTO(
+                    (Long)data[0],
+                    data[1] != null ? data[1].toString() : "",
+                    data[2] != null ? data[2].toString() : "",
+                    data[3] != null ? data[3].toString() : ""
+            );
+            studentSummaryDTOS.add(studentSummaryDTO);
+        }
+        return studentSummaryDTOS;
     }
 }

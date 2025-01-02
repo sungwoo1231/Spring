@@ -26,8 +26,12 @@ public class CourseController {
     public ResponseEntity<List<CourseDTO>> getCoursesLike(@RequestParam String title){
         return new ResponseEntity<>(courseService.getCoursesLike(title),HttpStatus.OK);
     }
+    // 과제5-2. 과목 정보를 새로 저장
     @PostMapping("/course/save")
-    public ResponseEntity <CourseDTO> saveCourse(@RequestBody CourseDTO courseDTO){
-        return new ResponseEntity<>(courseService.saveCourse(courseDTO),HttpStatus.CREATED);
+    public ResponseEntity<CourseDTO> saveCourse(
+            @RequestBody CourseDTO courseDTO) {
+        return new ResponseEntity<>(
+                courseService.saveCourse(courseDTO),
+                HttpStatus.CREATED);
     }
 }

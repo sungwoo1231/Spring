@@ -94,7 +94,7 @@ public class ProductTemplateRepository implements ProductRepository {
 
     @Override
     public String updateProductWithStock(int id, int stock) {
-        String query = "update 제품 set 재고 =? where 제품번호=? ";
+        String query = "update 제품 set 재고 =? where 제품번호= ? ";
         jdbcTemplate.update(query, stock , id);
         return "성공";
 

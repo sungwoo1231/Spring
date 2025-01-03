@@ -8,9 +8,10 @@ import lombok.*;
 @Getter
 @ToString
 public class ProductDTO {
-    private int productId;
+    private Long productId;
     private String productName;
     private double unitPrice;
     private int stock;
-    private double stockValue; // 재고금액 = 단가 * 재고
+    private String pkgUnit;
+    private double stockValue = unitPrice * stock; // 재고금액 = 단가 * 재고
 }

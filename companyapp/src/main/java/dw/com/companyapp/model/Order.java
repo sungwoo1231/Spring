@@ -1,5 +1,6 @@
 package dw.com.companyapp.model;
 
+import dw.com.companyapp.dto.OrderRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,15 @@ public class Order {
     private LocalDate requestDate;
     @Column(name="발송일")
     private LocalDate shippingDate;
+
+    public OrderRequestDTO toDTO(){
+        OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
+        orderRequestDTO.setOrderId(this.orderId);
+        orderRequestDTO.setCustomerId(this.customer.getCustomerId());
+        orderRequestDTO.setEmployeeId(this.employee.getEmployeeId());
+        orderRequestDTO.setRequestDate(this.getRequestDate());
+        orderRequestDTO.setShippingDate(this.getShippingDate());
+        orderRequestDTO.setOrderDetails(this.toDTO().getOrderDetails());
+        return orderRequestDTO;
+    }
 }

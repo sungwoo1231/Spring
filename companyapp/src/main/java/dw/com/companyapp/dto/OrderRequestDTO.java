@@ -17,5 +17,6 @@ public class OrderRequestDTO {
     private String customerId;
     private String employeeId;
     private LocalDate requestDate;
+    private LocalDate shippingDate;
     private List<OrderDetail> orderDetails;
 }

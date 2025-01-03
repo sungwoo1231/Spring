@@ -1,10 +1,12 @@
 package dw.com.companyapp.model;
 
+import dw.com.companyapp.dto.EmployeeDepartmentDTO;
 import dw.com.companyapp.model.Department;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,4 +44,17 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "부서번호")
     private Department department;
+
+    public EmployeeDepartmentDTO toDTO(){
+        EmployeeDepartmentDTO employeeDepartmentDTO = new EmployeeDepartmentDTO();
+        employeeDepartmentDTO.setEmployeeName(this.name);
+        employeeDepartmentDTO.setHireDate(this.hireDate);
+        if (this.department != null) {
+            employeeDepartmentDTO.setDepartmentName(this.department.getDepartmentName());
+        } else {
+            employeeDepartmentDTO.setDepartmentName("부서 없음");  // 부서가 없을 때의 기본값
+        }
+
+        return employeeDepartmentDTO;
+    }
 }

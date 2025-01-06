@@ -1,6 +1,5 @@
 package dw.com.companyapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +10,6 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name="주문세부")
-@JsonIgnoreProperties({"order"})
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

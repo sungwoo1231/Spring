@@ -19,6 +19,5 @@ public class OrderRequestDTO {
     private LocalDate requestDate;
     private LocalDate shippingDate;
     private LocalDate orderDate;
-    private Long productId;
     private List<OrderDetail> orderDetails;
 }

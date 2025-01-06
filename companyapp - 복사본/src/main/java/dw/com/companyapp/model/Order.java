@@ -30,7 +30,8 @@ public class Order {
     private LocalDate requestDate;
     @Column(name="발송일")
     private LocalDate shippingDate;
-
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetails;
 
     public OrderRequestDTO toDTO(){
         OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
@@ -40,7 +41,7 @@ public class Order {
         orderRequestDTO.setRequestDate(this.getRequestDate());
         orderRequestDTO.setShippingDate(this.getShippingDate());
         orderRequestDTO.setOrderDate(this.getOrderDate());
-
+       orderRequestDTO.setOrderDetails(this.getOrderDetails());
         return orderRequestDTO;
     }
 }

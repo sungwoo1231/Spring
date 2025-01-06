@@ -2,7 +2,6 @@ package dw.com.companyapp.service;
 
 
 import dw.com.companyapp.dto.OrderRequestDTO;
-import dw.com.companyapp.dto.ProductDTO;
 import dw.com.companyapp.exception.InvalidRequestException;
 import dw.com.companyapp.exception.ResourceNotFoundException;
 import dw.com.companyapp.model.*;
@@ -25,10 +24,6 @@ public class OrderService {
     OrderDetailRepository orderDetailRepository;
     @Autowired
     ProductRepository productRepository;
-    @Autowired
-    CustomerRepository customerRepository;
-    @Autowired
-    EmployeeRepository employeeRepository;
 
 
     public List<Order> getAllOrders() {
@@ -51,15 +46,15 @@ public class OrderService {
         }
         return orders;
     }
-
+    @Transactional
     public OrderRequestDTO saveOrder(OrderRequestDTO orderRequestDTO) {
-        // 고객 및 사원 객체 가져오기
-        Customer customer = customerRepository.findById(orderRequestDTO.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-        Employee employee = employeeRepository.findById(orderRequestDTO.getEmployeeId())
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        Customer customer = new Customer();
+        customer.setCustomerId(orderRequestDTO.getCustomerId());
 
+        Employee employee = new Employee();
+        employee.setEmployeeId(orderRequestDTO.getEmployeeId());
 
+        // 새로운 주문 생성
         Order order = new Order();
         order.setOrderId(orderRequestDTO.getOrderId());
         order.setCustomer(customer);
@@ -68,30 +63,34 @@ public class OrderService {
         order.setShippingDate(orderRequestDTO.getShippingDate());
         order.setOrderDate(orderRequestDTO.getOrderDate());
 
+        // 주문 세부사항 (orderDetails) 처리
+        List<OrderDetail> orderDetails = new ArrayList<>();
 
-        for (OrderDetail orderDetail : orderRequestDTO.getOrderDetails()) {
+        if (orderRequestDTO.getOrderDetails().isEmpty()) {
+            for (OrderDetail orderDetail : orderRequestDTO.getOrderDetails()) {
 
-            Product product = productRepository.findById(orderDetail.getProduct().getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    // OrderDetail 객체 생성 및 값 설정
+                    OrderDetail newOrderDetail = new OrderDetail();
+                    newOrderDetail.setUnitPrice(orderDetail.getUnitPrice());
+                    newOrderDetail.setOrderQuantity(orderDetail.getOrderQuantity());
+                    newOrderDetail.setDiscountRate(orderDetail.getDiscountRate());
+                    newOrderDetail.setOrder(order);  // Order 설정
 
-            OrderDetail newOrderDetail = new OrderDetail();
-            newOrderDetail.setUnitPrice(orderDetail.getUnitPrice());
-            newOrderDetail.setOrderQuantity(orderDetail.getOrderQuantity());
-            newOrderDetail.setDiscountRate(orderDetail.getDiscountRate());
-            newOrderDetail.setOrder(order);
-            newOrderDetail.setProduct(product);
-
-
-            orderDetailRepository.save(newOrderDetail);
-        }
+                    // orderDetails에 추가
+                    orderDetails.add(newOrderDetail);
+                }
+            }
 
 
+        // Order 객체에 orderDetails 설정
+        order.setOrderDetails(orderDetails);
+
+        // 주문 저장
         Order savedOrder = orderRepository.save(order);
 
-
+        // 저장된 주문을 DTO로 변환하여 반환
         return savedOrder.toDTO();
     }
-
 
     // 과제 4-4 주문번호와 발송일을 매개변수로 해당 주문의 발송일을 수정하는 API
     public String updateOrderWithShippingDate(String id, String date) {

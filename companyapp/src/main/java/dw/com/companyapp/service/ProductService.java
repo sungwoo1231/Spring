@@ -43,14 +43,17 @@ public class ProductService {
 
     // 과제 2-2 제품테이블에 여러 제품을 추가하는 API
     public List<Product> saveProductList(List<Product> productList) {
-        List<Product> products = new ArrayList<>();
-        for (Product data : productList) {
-            Product product = productRepository.save(data);
-
-            products.add(product); // 저장된 데이터를 리스트에 추가
-        }
-
-        return products;
+        return productList.stream()
+                .map(product ->productRepository.save(product))
+                .toList();
+//        List<Product> products = new ArrayList<>();
+//        for (Product data : productList) {
+//            Product product = productRepository.save(data);
+//
+//            products.add(product); // 저장된 데이터를 리스트에 추가
+//        }
+//
+//        return products;
     }
 
     // 과제 2-4 제품테이블의 정보를 수정하는 API
@@ -82,7 +85,8 @@ public class ProductService {
        List<Product> products =productRepository.getProductsBelowPrice(price).stream().toList();
        if (products.isEmpty()){
            throw new ResourceNotFoundException("해당되는 제품이 없습니다.");
-       }return productRepository.getProductsBelowPrice(price);
+       }
+       return products;
 
     }
 

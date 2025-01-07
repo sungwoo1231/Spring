@@ -19,17 +19,21 @@ import java.util.Map;
 @Transactional
 @Service
 public class OrderService {
-    @Autowired
     OrderRepository orderRepository;
-    @Autowired
     OrderDetailRepository orderDetailRepository;
-    @Autowired
     ProductRepository productRepository;
-    @Autowired
     CustomerRepository customerRepository;
-    @Autowired
     EmployeeRepository employeeRepository;
 
+    // @Autowired를 한개마다 붙이는 대신 생성자를 만들어서 생성자 주입으로 할 수 있다(권장사항)
+    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ProductRepository productRepository,
+    CustomerRepository customerRepository, EmployeeRepository employeeRepository) {
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
+        this.productRepository = productRepository;
+        this.customerRepository = customerRepository;
+        this.employeeRepository = employeeRepository;
+    }
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -53,17 +57,13 @@ public class OrderService {
     }
 
     public OrderRequestDTO saveOrder(OrderRequestDTO orderRequestDTO) {
-        // 고객 및 사원 객체 가져오기
-        Customer customer = customerRepository.findById(orderRequestDTO.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-        Employee employee = employeeRepository.findById(orderRequestDTO.getEmployeeId())
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-
-
         Order order = new Order();
         order.setOrderId(orderRequestDTO.getOrderId());
-        order.setCustomer(customer);
-        order.setEmployee(employee);
+        order.setCustomer(customerRepository.findById(orderRequestDTO.getCustomerId())
+                .orElseThrow(() -> new RuntimeException("Customer not found")));
+       order.setEmployee(employeeRepository.findById(orderRequestDTO.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Employee not found")));
+
         order.setRequestDate(orderRequestDTO.getRequestDate());
         order.setShippingDate(orderRequestDTO.getShippingDate());
         order.setOrderDate(orderRequestDTO.getOrderDate());

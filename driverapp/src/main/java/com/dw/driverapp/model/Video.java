@@ -9,16 +9,13 @@ import lombok.*;
 @Setter
 @ToString
 @Entity
-@Table(name = "장바구니")
+@Table(name = "비디오")
+public class Video {
 
-public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "subject_name")
-    private Subject subject_fk;
-    @OneToOne
-    @JoinColumn(name = "user_name")
-    private User user_fk;
+
+    @Column(name="video_url")
+    private String videoUrl;
 }

@@ -1,5 +1,6 @@
 package com.dw.driverapp.model;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name = "이미지")
-public class image {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

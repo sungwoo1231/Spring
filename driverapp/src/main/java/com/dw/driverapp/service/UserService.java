@@ -43,7 +43,7 @@ public class UserService {
                         authorityRepository.findById("User")
                                 .orElseThrow(() -> new ResourceNotFoundException("권한 없음")),
                         LocalDateTime.now(),
-                        userDTO.getPoint())
+                        10000)
         ).toDTO();// 회원가입
     }
 
@@ -66,3 +66,5 @@ public class UserService {
                 .orElseThrow(()->new InvalidRequestException("No username"));
     }
 }
+
+

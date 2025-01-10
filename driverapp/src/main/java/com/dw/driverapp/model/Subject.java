@@ -30,16 +30,9 @@ public class Subject {
     @Column(name="price")
     private double price;
 
-    @OneToMany
-    @JoinColumn(name="image_urls")
-    private List<Image>imageList = new ArrayList<>();
-
-   @OneToMany
-   @JoinColumn(name="video_urls")
-   private List<Video>videoList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="user_name")
-    private User user_fk;
+    @JoinColumn(name="instructor_name")
+    private User user;
 
 }

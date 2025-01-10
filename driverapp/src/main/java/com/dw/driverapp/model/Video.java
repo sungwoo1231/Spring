@@ -18,4 +18,9 @@ public class Video {
 
     @Column(name="video_url")
     private String videoUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "subject_video")
+    private Subject subject;
+
 }

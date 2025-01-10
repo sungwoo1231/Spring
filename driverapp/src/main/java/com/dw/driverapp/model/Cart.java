@@ -16,7 +16,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(name = "subject_name")
+    @JoinColumn(name = "subject_id")
     private Subject subject_fk;
     @OneToOne
     @JoinColumn(name = "user_name")

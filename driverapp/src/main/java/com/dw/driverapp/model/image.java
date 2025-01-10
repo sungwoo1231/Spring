@@ -17,4 +17,8 @@ public class Image {
     private Long id;
     @Column(name = "image_url",nullable = false)
     private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "subject_image")
+    private Subject subject;
 }

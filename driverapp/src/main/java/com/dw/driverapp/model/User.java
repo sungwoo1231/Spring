@@ -36,15 +36,19 @@ public class User {
     private int point;
 
 
-    public UserDTO toDto() {
+    public UserDTO toDTO(){
         return new UserDTO(
                 this.userName,
                 null,
                 this.email,
                 this.realName,
                 this.birthdate,
-                this.point,
-                authority.getAuthorityName()
+
+
+                authority.getAuthorityName(),
+                this.point
+
         );
+
     }
 }

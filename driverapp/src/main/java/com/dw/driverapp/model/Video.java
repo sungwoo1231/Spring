@@ -20,7 +20,7 @@ public class Video {
     private String videoUrl;
 
     @ManyToOne
-    @JoinColumn(name = "subject_video")
+    @JoinColumn(name = "subject_id")
     private Subject subject;
 
 }

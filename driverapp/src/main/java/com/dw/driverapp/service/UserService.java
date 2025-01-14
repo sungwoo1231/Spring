@@ -6,10 +6,12 @@ import com.dw.driverapp.exception.ResourceNotFoundException;
 import com.dw.driverapp.exception.UnauthorizedUserException;
 import com.dw.driverapp.model.User;
 import com.dw.driverapp.repository.AuthorityRepository;
+import com.dw.driverapp.repository.SubjectRepository;
 import com.dw.driverapp.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    SubjectRepository subjectRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
@@ -44,6 +48,7 @@ public class UserService {
                                 .orElseThrow(() -> new ResourceNotFoundException("권한 없음")),
                         LocalDateTime.now(),
                         10000)
+
         ).toDTO();// 회원가입
     }
 

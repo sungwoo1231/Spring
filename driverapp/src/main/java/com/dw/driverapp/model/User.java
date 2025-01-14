@@ -34,6 +34,10 @@ public class User {
     private LocalDateTime createdAt;
     @Column(name="point")
     private int point;
+    @ManyToMany
+    @JoinTable(name = "user_subject")
+
+
 
 
     public UserDTO toDTO(){
@@ -47,6 +51,8 @@ public class User {
 
                 authority.getAuthorityName(),
                 this.point
+
+
 
         );
 

@@ -1,6 +1,7 @@
 package com.dw.driverapp.dto;
 
 import com.dw.driverapp.model.Authority;
+import com.dw.driverapp.model.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -24,6 +25,7 @@ public class UserDTO {
     private String birthdate;
     private String role;
     private int point;
+
 
 
 

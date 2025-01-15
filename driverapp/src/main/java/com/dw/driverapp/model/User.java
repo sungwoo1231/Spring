@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -26,7 +27,7 @@ public class User {
     @Column(name = "real_name", nullable = false)
     private String realName;
     @Column(name="birthdate",nullable = false, unique = true)
-    private String birthdate;
+    private LocalDate birthdate;
     @ManyToOne
     @JoinColumn(name = "user_authority")
     private Authority authority;
@@ -34,8 +35,7 @@ public class User {
     private LocalDateTime createdAt;
     @Column(name="point")
     private int point;
-    @ManyToMany
-    @JoinTable(name = "user_subject")
+
 
 
 

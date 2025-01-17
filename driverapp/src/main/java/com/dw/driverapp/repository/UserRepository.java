@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
+
+    Optional<User> findByUserName(String userName);
     Optional<User> findByEmail(String email);
     Optional<List<User>> findByBirthdate(LocalDate birthdate);
     Optional<List<User>> findByRealName (String realName);
@@ -23,5 +25,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<List<User>> findBycreatedAt (LocalDate date);
     @Query("select u from User u where  u.createdAt BETWEEN :date1 AND :date2")
     Optional<List<User>> createdAtbetweendate (LocalDate date1, LocalDate date2);
+
 
 }

@@ -11,9 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,13 +22,14 @@ public class CommentController {
 
     // 유저 -> 게시판에 달린 모든 유저 답글 조회
     @GetMapping("/comment/all")
-    public ResponseEntity<List<CommentDTO>> getAllComment(HttpServletRequest request){
+    public ResponseEntity<List<CommentDTO>> getAllComment(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("username") == null) {
             throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
         }
         return new ResponseEntity<>(commentService.getAllComment(), HttpStatus.OK);
     }
+
     // 유저 -> 게시판에 달린 특정 유저 답글 조회
     @GetMapping("/comment/username/{username}")
     public ResponseEntity<List<CommentDTO>> usernameFind(@PathVariable String username, HttpServletRequest request) {
@@ -40,13 +39,49 @@ public class CommentController {
         }
         return new ResponseEntity<>(commentService.usernameFind(username), HttpStatus.OK);
     }
+
     // 유저 -> 게시판에 달린 답글 board id로 조회
     @GetMapping("/comment/board/{id}")
-    public ResponseEntity<List<CommentDTO>> boardIdFind(@PathVariable Long id,HttpServletRequest request){
+    public ResponseEntity<List<CommentDTO>> boardIdFind(@PathVariable Long id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("username") == null) {
             throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
         }
-        return new ResponseEntity<>(commentService.boardIdFind(id),HttpStatus.OK);
+        return new ResponseEntity<>(commentService.boardIdFind(id), HttpStatus.OK);
+    }
+
+    // 유저 -> 게시판에 답글 등록
+    @PostMapping("/comment/add")
+    public ResponseEntity<CommentDTO> commentAdd(@RequestBody CommentDTO commentDTO,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 등록 가능합니다.");
+        }
+        String username = (String) session.getAttribute("username");
+        return new ResponseEntity<>(commentService.commentAdd(commentDTO,username),HttpStatus.CREATED);
+    }
+    // 유저- 로그인한 사용자의 답글을 삭제
+    @DeleteMapping("/comment/delete/{id}")
+    public ResponseEntity<CommentDTO> deleteComment(@PathVariable Long id,
+                                                    HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 삭제가 가능합니다.");
+        }
+        String username = (String) session.getAttribute("username");
+        return new ResponseEntity<>(commentService.deleteComment(id, username), HttpStatus.OK);
+    }
+
+    // 유저- 로그인한 사용자의 답글을 수정
+    @PutMapping("/comment/update/{id}")
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id,
+                                                    @RequestBody CommentDTO commentDTO,
+                                                    HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 수정이 가능합니다.");
+        }
+        String username = (String) session.getAttribute("username");
+        return new ResponseEntity<>(commentService.updateComment(id, commentDTO, username), HttpStatus.OK);
     }
 }

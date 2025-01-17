@@ -1,5 +1,6 @@
 package com.dw.driverapp.model;
 
+import com.dw.driverapp.dto.CartDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +18,19 @@ public class Cart {
     private Long id;
     @OneToOne
     @JoinColumn(name = "subject_id")
-    private Subject subject_fk;
+    private Subject subject;
     @OneToOne
     @JoinColumn(name = "user_name")
-    private User user_fk;
+    private User user;
+
+    public CartDTO toDTO(){
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId(this.id);
+        cartDTO.setSubjectTitle(this.subject.getTitle());
+        cartDTO.setUsername(this.user.getUserName());
+        cartDTO.setPrice(this.subject.getPrice());
+        return cartDTO;
+    }
+
+
 }

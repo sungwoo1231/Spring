@@ -133,4 +133,11 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         return userRepository.save(user1);
     }
+
+    public void deleteUser(String username) {
+        User user = userRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("해당 유저를 찾을 수 없습니다."));
+
+        userRepository.delete(user);
+    }
 }

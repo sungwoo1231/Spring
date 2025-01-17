@@ -22,6 +22,7 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     UserService userService;
+
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
@@ -124,11 +125,33 @@ public class UserController {
     public ResponseEntity<List<User>> userbetweenFind(@PathVariable LocalDate date1,@PathVariable LocalDate date2){
         return new ResponseEntity<>(userService.userbetweenFind(date1,date2),HttpStatus.OK);
     }
+    // 유저 - 비밀번호 변경
     @PutMapping("/user/update/password")
-    public ResponseEntity<User> userUpdatePassWord(@RequestBody User user) {
+    public ResponseEntity<User> userUpdatePassWord(@RequestBody User user,HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 회원 탈퇴가 가능합니다.");
+        }
+
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return new ResponseEntity<>(userService.userUpdatePassWord(user),HttpStatus.OK);
     }
 
+    // 유저 - 회원탈퇴
+    @DeleteMapping("/user/delete")
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        // 로그인한 사람만 탈퇴 가능 코드
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 회원 탈퇴가 가능합니다.");
+        }
+        String username = (String) session.getAttribute("username");
+
+        userService.deleteUser(username);
+
+        session.invalidate();
+
+        return new ResponseEntity<>("회원 탈퇴가 완료되었습니다.", HttpStatus.OK);
+    }
 }

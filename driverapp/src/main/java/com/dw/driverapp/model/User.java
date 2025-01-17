@@ -1,3 +1,4 @@
+
 package com.dw.driverapp.model;
 
 import com.dw.driverapp.dto.UserDTO;
@@ -9,6 +10,8 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,13 +35,13 @@ public class User {
     @JoinColumn(name = "user_authority")
     private Authority authority;
     @Column(name="created_at", updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     @Column(name="point")
     private int point;
 
-
-
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public UserDTO toDTO(){
         return new UserDTO(
@@ -47,12 +50,8 @@ public class User {
                 this.email,
                 this.realName,
                 this.birthdate,
-
-
                 authority.getAuthorityName(),
                 this.point
-
-
 
         );
 

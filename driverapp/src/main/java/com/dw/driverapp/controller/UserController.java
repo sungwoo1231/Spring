@@ -130,7 +130,7 @@ public class UserController {
     public ResponseEntity<User> userUpdatePassWord(@RequestBody User user,HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("username") == null) {
-            throw new UnauthorizedUserException("로그인한 사용자만 회원 탈퇴가 가능합니다.");
+            throw new UnauthorizedUserException("로그인한 사용자만 비밀번호 변경이 가능합니다.");
         }
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());

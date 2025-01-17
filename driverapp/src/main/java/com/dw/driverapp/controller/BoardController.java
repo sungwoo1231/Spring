@@ -3,8 +3,11 @@ package com.dw.driverapp.controller;
 
 import com.dw.driverapp.dto.BoardAllDTO;
 import com.dw.driverapp.dto.BoardDTO;
+import com.dw.driverapp.exception.UnauthorizedUserException;
 import com.dw.driverapp.model.Board;
 import com.dw.driverapp.service.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +43,7 @@ public class BoardController {
     // 유저- 사용자의 게시한 게시글 조회
     @GetMapping("/boardusername/{username}")
     public ResponseEntity<List<BoardDTO>> boardUsernameFind (@PathVariable String username){
+
         return new ResponseEntity<>(boardService.boardUsernameFind(username),HttpStatus.OK);
     }
 

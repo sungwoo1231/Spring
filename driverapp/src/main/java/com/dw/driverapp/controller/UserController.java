@@ -35,7 +35,11 @@ public class UserController {
 
     // 관리자 - 모든 회원정보 조회
     @GetMapping("/user/all")
-    public ResponseEntity<List<User>> getAllUser() {
+    public ResponseEntity<List<User>> getAllUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
     }
 
@@ -72,19 +76,31 @@ public class UserController {
 
     // 유저- username으로 정보 조회
     @GetMapping("/user/username/{username}")
-    public ResponseEntity<User> usernameFind(@PathVariable String username) {
+    public ResponseEntity<User> usernameFind(@PathVariable String username,HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.usernameFind(username), HttpStatus.OK);
     }
 
     // 유저- email로 정보 조회
     @GetMapping("/user/email/{email}")
-    public ResponseEntity<User> userEmailFind(@PathVariable String email) {
+    public ResponseEntity<User> userEmailFind(@PathVariable String email,HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userEmailFind(email), HttpStatus.OK);
     }
 
     // 유저-realname으로 정보 조회
     @GetMapping("/user/realname/{realname}")
-    public ResponseEntity<List<User>> realNameFind(@PathVariable String realname) {
+    public ResponseEntity<List<User>> realNameFind(@PathVariable String realname,HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.realNameFind(realname), HttpStatus.OK);
 
 
@@ -92,39 +108,64 @@ public class UserController {
 
     // 유저-birthdate로 정보 조회
     @GetMapping("/user/birthdate/{birthdate}")
-    public ResponseEntity<List<User>> userBirthdateFind(@PathVariable LocalDate birthdate) {
+    public ResponseEntity<List<User>> userBirthdateFind(@PathVariable LocalDate birthdate,HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userBirthdateFind(birthdate), HttpStatus.OK);
     }
 
     // 관리자- 권한으로 정보 조회*****
     @GetMapping("/user/authority/{authority}")
-    public ResponseEntity<List<User>> userauthorityFind(@PathVariable String authority){
+    public ResponseEntity<List<User>> userauthorityFind(@PathVariable String authority,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userauthorityFind(authority),HttpStatus.OK);
     }
 
     // 유저- 지정된 날짜 이후 가입자 정보 조회
     @GetMapping("/user/over/{date}")
-    public ResponseEntity<List<User>> userdateoverFind(@PathVariable LocalDate date){
+    public ResponseEntity<List<User>> userdateoverFind(@PathVariable LocalDate date,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userdateoverFind(date),HttpStatus.OK);
     }
 
     // 유저- 지정된 날짜 이전 가입자 정보 조회
     @GetMapping("/user/under/{date}")
-    public ResponseEntity<List<User>> userdateunderFind(@PathVariable LocalDate date){
+    public ResponseEntity<List<User>> userdateunderFind(@PathVariable LocalDate date,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userdateunderFind(date),HttpStatus.OK);
     }
 
     // 유저- 지정된 날짜 가입자 정보 조회
     @GetMapping("/user/date/{date}")
-    public ResponseEntity<List<User>> userdateFind(@PathVariable LocalDate date){
+    public ResponseEntity<List<User>> userdateFind(@PathVariable LocalDate date,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userdateFind(date),HttpStatus.OK);
     }
 
     //유저- 지정된 날짜 사이에 가입한 정보 조회
     @GetMapping("/user/{date1}/{date2}")
-    public ResponseEntity<List<User>> userbetweenFind(@PathVariable LocalDate date1,@PathVariable LocalDate date2){
+    public ResponseEntity<List<User>> userbetweenFind(@PathVariable LocalDate date1,@PathVariable LocalDate date2,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            throw new UnauthorizedUserException("로그인한 사용자만 게시글 조회가 가능합니다.");
+        }
         return new ResponseEntity<>(userService.userbetweenFind(date1,date2),HttpStatus.OK);
     }
+
     // 유저 - 비밀번호 변경
     @PutMapping("/user/update/password")
     public ResponseEntity<User> userUpdatePassWord(@RequestBody User user,HttpServletRequest request) {

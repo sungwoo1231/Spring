@@ -20,7 +20,7 @@ public class CommentService {
     public List<CommentDTO> getAllComment(){
         return commentRepository.findAll().stream().map(Comment::commentDTO).toList();
     }
-
+    // 유저 -> 게시판에 달린 특정 유저 답글 조회
     public List<CommentDTO> usernameFind(String username){
         return commentRepository.findByUserUserName(username)
                 .orElseThrow(() -> new ResourceNotFoundException("해당 유저의 댓글이 없습니다."))
@@ -28,9 +28,9 @@ public class CommentService {
                 .map(Comment::commentDTO)
                 .toList();
     }
+    // 유저 -> 게시판에 달린 답글 board id로 조회
     public List<CommentDTO> boardIdFind(Long id){
-        return commentRepository.findByBoardId(id)
-                .filter(commentDTOS -> !commentDTOS.isEmpty())
+        return commentRepository.findByBoardId(id).filter(comments -> !comments.isEmpty())
                 .orElseThrow(()-> new ResourceNotFoundException("없음"))
                 .stream()
                 .map(Comment::commentDTO)

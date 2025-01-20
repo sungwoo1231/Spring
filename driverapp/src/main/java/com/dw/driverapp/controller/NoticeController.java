@@ -35,7 +35,7 @@ public class NoticeController {
     public ResponseEntity<List<Notice>> noticeTitleFind(@PathVariable String title){
         return new ResponseEntity<>(noticeService.noticeTitleFind(title),HttpStatus.OK);
     }
-    
+
     @PostMapping("/admin/notice/add")
     public ResponseEntity<Notice> noticeAdd(@RequestBody Notice notice, HttpServletRequest request) {
         HttpSession session = request.getSession(false);

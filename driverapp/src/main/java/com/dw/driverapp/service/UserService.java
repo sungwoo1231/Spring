@@ -5,6 +5,7 @@ import com.dw.driverapp.dto.UserDTO;
 import com.dw.driverapp.exception.InvalidRequestException;
 import com.dw.driverapp.exception.ResourceNotFoundException;
 import com.dw.driverapp.exception.UnauthorizedUserException;
+import com.dw.driverapp.model.Authority;
 import com.dw.driverapp.model.User;
 import com.dw.driverapp.repository.AuthorityRepository;
 import com.dw.driverapp.repository.SubjectRepository;
@@ -67,9 +68,10 @@ public class UserService {
         return passwordEncoder.matches(password, user.getPassword());
     }
 
-    // 유저- username으로 정보 조회
+
     public User usernameFind(String username) {
-        return userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("입력하신 회원이 존재하지 않습니다."));
+        return userRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("입력하신 회원이 존재하지 않습니다."));
     }
 
     // 유저- email으로 정보 조회

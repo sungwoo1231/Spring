@@ -8,10 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 public class UserDTO {
     private String userName;
@@ -29,6 +27,8 @@ public class UserDTO {
     private String role;
     private int point;
 
+    private String authority;
 
-
+    public UserDTO(String userName, Object o, String email, String realName, LocalDate birthdate, String authorityName, int point) {
+    }
 }

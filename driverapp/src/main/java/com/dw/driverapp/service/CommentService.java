@@ -52,7 +52,7 @@ public class CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다"));
 
         Board board = boardRepository.findById(commentDTO.getBoardId())
-                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 게시글입니"));
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 게시글입니다"));
         Comment comment = new Comment();
         comment.setUser(author);
         comment.setComment(commentDTO.getComment());

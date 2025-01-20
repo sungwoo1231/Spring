@@ -23,4 +23,5 @@ public class Notice {
     private String content;
     @Column(name="created_date", nullable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
+    private String createdBy;
 }

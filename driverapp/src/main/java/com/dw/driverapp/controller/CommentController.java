@@ -62,13 +62,19 @@ public class CommentController {
     }
     // 유저- 로그인한 사용자의 답글을 삭제
     @DeleteMapping("/comment/delete/{id}")
-    public ResponseEntity<CommentDTO> deleteComment(@PathVariable Long id,
+    public ResponseEntity<CommentDTO> deleteComment(@PathVariable Long id,String username,
                                                     HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("username") == null) {
             throw new UnauthorizedUserException("로그인한 사용자만 삭제가 가능합니다.");
         }
-        String username = (String) session.getAttribute("username");
+        String username1 = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+
+
+        if (!"ADMIN".equals(role)&& !username1.equals(username)) {
+            throw new UnauthorizedUserException("관리자 또는 본인 답글만 삭제할 수 있습니다.");
+        }
         return new ResponseEntity<>(commentService.deleteComment(id, username), HttpStatus.OK);
     }
 

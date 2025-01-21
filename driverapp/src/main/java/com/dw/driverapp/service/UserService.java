@@ -2,6 +2,7 @@
 package com.dw.driverapp.service;
 
 import com.dw.driverapp.dto.UserDTO;
+import com.dw.driverapp.dto.UserPointDTO;
 import com.dw.driverapp.exception.InvalidRequestException;
 import com.dw.driverapp.exception.ResourceNotFoundException;
 import com.dw.driverapp.exception.UnauthorizedUserException;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -42,18 +44,22 @@ public class UserService {
         if (user.isPresent()) {
             throw new InvalidRequestException("입력하신 정보가 이미 존재합니다.");
         }
-        return userRepository.save(
-                new User(
-                        userDTO.getUserName(),
-                        passwordEncoder.encode(userDTO.getPassword()),
-                        userDTO.getEmail(),
-                        userDTO.getRealName(),
-                        userDTO.getBirthdate(),
-                        authorityRepository.findById("User")
-                                .orElseThrow(() -> new ResourceNotFoundException("NO ROLE")),
-                        LocalDate.now(),
-                        10000)
-        ).toDTO();
+
+        // 새 유저 생성
+        User newUser = new User(
+                userDTO.getUserName(),
+                passwordEncoder.encode(userDTO.getPassword()),
+                userDTO.getEmail(),
+                userDTO.getRealName(),
+                userDTO.getBirthdate(),
+                authorityRepository.findById("User")
+                        .orElseThrow(() -> new ResourceNotFoundException("NO ROLE")),
+                LocalDate.now(), // 가입 날짜
+                10000, // 초기 포인트
+                LocalDate.now()
+        );
+        // 저장 후 DTO로 변환하여 반환
+        return userRepository.save(newUser).toDTO();
     }
 
     // 관리자 - 모든 회원정보 조회
@@ -67,6 +73,7 @@ public class UserService {
                 .orElseThrow(() -> new InvalidRequestException("사용자의 이름이 잘못되었습니다."));
         return passwordEncoder.matches(password, user.getPassword());
     }
+
 
 
     public User usernameFind(String username) {
@@ -129,6 +136,7 @@ public class UserService {
                 .filter(users -> !users.isEmpty())
                 .orElseThrow(() -> new ResourceNotFoundException("입력하신 날짜에 사이에 가입한 회원이 없습니다."));
     }
+
     public User userUpdatePassWord(User user){
         User user1 = userRepository.findById(user.getUserName()).orElseThrow(()->new ResourceNotFoundException("해당 유저를 찾을 수 없습니다."));
         user1.setPassword(user.getPassword());
@@ -141,5 +149,43 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("해당 유저를 찾을 수 없습니다."));
 
         userRepository.delete(user);
+    }
+    // 유저- 가장 먼저 가입한 유저 조회
+    public List<User> firstUser() {
+        return userRepository.findFirstCreatedAt()
+                .filter(users -> !users.isEmpty())
+                .orElseThrow(() -> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
+    }
+
+    // 유저- 가장 최근 가입한 유저 조회
+    public List<User> lastUser() {
+        return userRepository.findLastCreatedAt()
+                .filter(users -> !users.isEmpty())
+                .orElseThrow(() -> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
+    }
+    // 관리자- 포인트가 가장 많은 회원 조회
+    public List<User> userPointMost(){
+        return userRepository.MostPointUser()
+                .filter(users -> !users.isEmpty())
+                .orElseThrow(()-> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
+    }
+
+    //관리자- 포인트가 가장 적은 회원 조회
+    public List<User> userPointLeast(){
+        return userRepository.leastPointUser()
+                .filter(users -> !users.isEmpty())
+                .orElseThrow(()-> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
+    }
+    // 관리자- 회원들이 평균 포인트 조회
+    public Double userPointAverage(){
+        return userRepository.findAveragePoint()
+                .orElseThrow(()-> new ResourceNotFoundException("정보를 불러올 수 없습니다."));
+    }
+
+    // 관리자- 모든 회원들의 포인트 조회
+    public List<UserPointDTO> userAllPoint(){
+        return userRepository.findAll().stream()
+                .map(User::todto)
+                .collect(Collectors.toList());
     }
 }

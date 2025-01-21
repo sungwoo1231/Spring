@@ -26,9 +26,10 @@ public class UserDTO {
     private LocalDate birthdate;
     private String role;
     private int point;
-
+    private LocalDate lastLoginDate;
     private String authority;
 
-    public UserDTO(String userName, Object o, String email, String realName, LocalDate birthdate, String authorityName, int point) {
+
+    public UserDTO(String userName, Object o, String email, String realName, LocalDate birthdate, String authorityName, int point, LocalDate lastLoginDate) {
     }
 }

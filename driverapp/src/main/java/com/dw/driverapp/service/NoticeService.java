@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoticeService {
@@ -52,6 +53,29 @@ public class NoticeService {
         // 공지사항의 작성자는 관리자로 설정해도 됩니다 (원하는대로 설정 가능)
         notice1.setCreatedBy(user.getUserName());
 
+        return noticeRepository.save(notice1);
+    }
+    //관리자- 로그인 중 공지사항 삭제
+    public Notice noticeDelete(Long id, String username) {
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+        Optional<Notice> noticeOpt = noticeRepository.findById(id);
+        if (noticeOpt.isEmpty()) {
+            throw new ResourceNotFoundException("공지사항을 찾을 수 없습니다.");
+        }
+        Notice notice = noticeOpt.get();
+        noticeRepository.delete(notice);
+        return notice;
+    }
+
+    // 관리자- 로그인 중 공지사항 수정
+    public Notice noticeUpdate(Long id, Notice notice, String username) {
+        Notice notice1 = noticeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("공지사항이 존재하지 않습니다."));
+
+        notice1.setTitle(notice.getTitle());
+        notice1.setContent(notice.getContent());
+        notice1.setCreatedDate(LocalDateTime.now());
         return noticeRepository.save(notice1);
     }
 }

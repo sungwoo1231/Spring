@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface EnrollmentRepository extends JpaRepository<Enrollment,Long> {
 
     Optional<List<Enrollment>> findBySubjectId(Long id);
+    List<Enrollment> findByUser_UserName(String username);
+
 
 }

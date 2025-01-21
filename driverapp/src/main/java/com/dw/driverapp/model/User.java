@@ -2,6 +2,7 @@
 package com.dw.driverapp.model;
 
 import com.dw.driverapp.dto.UserDTO;
+import com.dw.driverapp.dto.UserPointDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,12 +37,13 @@ public class User {
     private LocalDate createdAt;
     @Column(name="point")
     private int point;
+    @Column(name="last_login_date")
+    private LocalDate lastLoginDate;  // 마지막 로그인 날짜
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    public UserDTO toDTO(){
+
+
+    public UserDTO toDTO() {
         return new UserDTO(
                 this.userName,
                 null,
@@ -49,9 +51,16 @@ public class User {
                 this.realName,
                 this.birthdate,
                 authority.getAuthorityName(),
-                this.point
+                this.point,
+                this.lastLoginDate
 
         );
+    }
+        public UserPointDTO todto(){
+            return new UserPointDTO(
+                    this.userName,
+                    this.point
+            );
 
     }
 }

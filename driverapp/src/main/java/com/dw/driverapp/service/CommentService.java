@@ -64,9 +64,7 @@ public class CommentService {
     public CommentDTO deleteComment(Long id, String username) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found"));
-        if (!comment.getUser().getUserName().equals(username)) {
-            throw new UnauthorizedUserException("사용자의 답글이 아닙니다.");
-        }
+
         commentRepository.delete(comment);
         return comment.toDTO();
     }

@@ -1,4 +1,3 @@
-
 package com.dw.driverapp.service;
 
 import com.dw.driverapp.dto.UserDTO;
@@ -6,7 +5,6 @@ import com.dw.driverapp.dto.UserPointDTO;
 import com.dw.driverapp.exception.InvalidRequestException;
 import com.dw.driverapp.exception.ResourceNotFoundException;
 import com.dw.driverapp.exception.UnauthorizedUserException;
-import com.dw.driverapp.model.Authority;
 import com.dw.driverapp.model.User;
 import com.dw.driverapp.repository.AuthorityRepository;
 import com.dw.driverapp.repository.SubjectRepository;
@@ -44,23 +42,23 @@ public class UserService {
         if (user.isPresent()) {
             throw new InvalidRequestException("입력하신 정보가 이미 존재합니다.");
         }
-
-        // 새 유저 생성
         User newUser = new User(
                 userDTO.getUserName(),
                 passwordEncoder.encode(userDTO.getPassword()),
                 userDTO.getEmail(),
                 userDTO.getRealName(),
                 userDTO.getBirthdate(),
+                userDTO.getGender(),
                 authorityRepository.findById("User")
                         .orElseThrow(() -> new ResourceNotFoundException("NO ROLE")),
-                LocalDate.now(), // 가입 날짜
-                10000, // 초기 포인트
+                LocalDate.now(),
+                100000,
                 LocalDate.now()
         );
-        // 저장 후 DTO로 변환하여 반환
+
         return userRepository.save(newUser).toDTO();
     }
+
 
     // 관리자 - 모든 회원정보 조회
     public List<User> getAllUser() {
@@ -74,18 +72,11 @@ public class UserService {
         return passwordEncoder.matches(password, user.getPassword());
     }
 
-
-
+    // 유저- username으로 정보 조회
     public User usernameFind(String username) {
-        return userRepository.findById(username)
-                .orElseThrow(() -> new ResourceNotFoundException("입력하신 회원이 존재하지 않습니다."));
+        return userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("입력하신 회원이 존재하지 않습니다."));
     }
 
-    // 유저- email으로 정보 조회
-    public User userEmailFind(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("입력하신 email의 정보를 가진 회원이 존재하지 않습니다."));
-    }
 
     // 유저- realname으로 정보 조회
     public List<User> realNameFind(String realname) {
@@ -131,25 +122,28 @@ public class UserService {
     }
 
     //유저- 지정된 날짜 사이에 가입한 정보 조회
-    public List<User> userbetweenFind(LocalDate date1, LocalDate date2){
-        return userRepository.createdAtbetweendate(date1,date2)
+    public List<User> userbetweenFind(LocalDate date1, LocalDate date2) {
+        return userRepository.createdAtbetweendate(date1, date2)
                 .filter(users -> !users.isEmpty())
                 .orElseThrow(() -> new ResourceNotFoundException("입력하신 날짜에 사이에 가입한 회원이 없습니다."));
     }
 
-    public User userUpdatePassWord(User user){
-        User user1 = userRepository.findById(user.getUserName()).orElseThrow(()->new ResourceNotFoundException("해당 유저를 찾을 수 없습니다."));
+    // 유저 - 비밀번호 변경
+    public User userUpdatePassWord(User user) {
+        User user1 = userRepository.findById(user.getUserName()).orElseThrow(() -> new ResourceNotFoundException("없음"));
         user1.setPassword(user.getPassword());
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         return userRepository.save(user1);
     }
 
+    // 유저 - 회원탈퇴
     public void deleteUser(String username) {
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new ResourceNotFoundException("해당 유저를 찾을 수 없습니다."));
 
         userRepository.delete(user);
     }
+
     // 유저- 가장 먼저 가입한 유저 조회
     public List<User> firstUser() {
         return userRepository.findFirstCreatedAt()
@@ -163,29 +157,67 @@ public class UserService {
                 .filter(users -> !users.isEmpty())
                 .orElseThrow(() -> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
     }
+
     // 관리자- 포인트가 가장 많은 회원 조회
-    public List<User> userPointMost(){
+    public List<User> userPointMost() {
         return userRepository.MostPointUser()
                 .filter(users -> !users.isEmpty())
-                .orElseThrow(()-> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
     }
 
     //관리자- 포인트가 가장 적은 회원 조회
-    public List<User> userPointLeast(){
+    public List<User> userPointLeast() {
         return userRepository.leastPointUser()
                 .filter(users -> !users.isEmpty())
-                .orElseThrow(()-> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("정보를 찾을 수 없습니다."));
     }
+
     // 관리자- 회원들이 평균 포인트 조회
-    public Double userPointAverage(){
+    public Double userPointAverage() {
         return userRepository.findAveragePoint()
-                .orElseThrow(()-> new ResourceNotFoundException("정보를 불러올 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("정보를 불러올 수 없습니다."));
     }
 
     // 관리자- 모든 회원들의 포인트 조회
-    public List<UserPointDTO> userAllPoint(){
+    public List<UserPointDTO> userAllPoint() {
         return userRepository.findAll().stream()
                 .map(User::todto)
                 .collect(Collectors.toList());
     }
+
+    // 유저 - 포인트 내역 조회
+    public User userPoint(String username) {
+        return userRepository.findByUserName(username)
+                .orElseThrow(() -> new ResourceNotFoundException("회원이 존재하지 않습니다."));
+    }
+
+    // 유저- 현재 로그인중인 본인의 정보 조회
+    public User userMe(String username) {
+        return userRepository.findByUserName(username)
+                .orElseThrow(() -> new ResourceNotFoundException("사용자 정보를 찾을 수 없습니다."));
+    }
+
+    // 유저- 로그인한 회원의 본인 회원정보를 수정
+    public User updateUser(String username, User updatedUser) {
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new ResourceNotFoundException("회원이 존재하지 않습니다."));
+        if (user != null) {
+            user.setRealName(updatedUser.getRealName());
+            user.setEmail(updatedUser.getEmail());
+            return userRepository.save(user);
+        } else {
+            return null;
+        }
+    }
+
+    public void adminDeleteUser(String username) {
+        Optional<User> user = userRepository.findByUserName(username);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다: " + username);
+        }
+        userRepository.delete(user.get());
+    }
+
 }
+
+

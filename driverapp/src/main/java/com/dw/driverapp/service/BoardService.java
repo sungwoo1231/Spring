@@ -1,4 +1,3 @@
-
 package com.dw.driverapp.service;
 
 import com.dw.driverapp.dto.BoardAllDTO;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,27 +68,47 @@ public class BoardService {
         newBoard.setTitle(boardAllDTO.getTitle());
         newBoard.setContent(boardAllDTO.getContent());
         newBoard.setAuthor(author);
-        newBoard.setCreatedDate(LocalDateTime.now());
+        newBoard.setCreatedDate(LocalDate.now());
         newBoard.setModifiedDate(LocalDateTime.now());
         Board savedBoard = boardRepository.save(newBoard);
         return savedBoard.TODTO();
     }
 
     // 유저- 로그인 중인 회원의 게시글 삭제
-    public BoardDTO deleteBoard(Long id , String username) {
+    // 유저- 로그인 중인 회원의 게시글 삭제
+    public BoardDTO deleteBoard(Long id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Board not found"));
+
+        // 관리자라면 모든 게시글을 삭제할 수 있음
+        board.setTitle("삭제된 게시글입니다.");
+        board.setContent("해당 게시글은 관리자에 의해 삭제되었습니다.");
+        board.setModifiedDate(LocalDateTime.now());
+        Board updatedBoard = boardRepository.save(board);
+        return updatedBoard.toDTO();
+    }
+
+    // 유저- 로그인 중인 회원의 게시글 삭제 (일반 사용자)
+    public BoardDTO deleteBoard(Long id, String username) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Board not found"));
+
+        // 사용자가 작성한 게시글만 삭제할 수 있음
         if (!board.getAuthor().getUserName().equals(username)) {
             throw new UnauthorizedUserException("본인이 작성한 게시글만 삭제할 수 있습니다.");
         }
+
         board.setTitle("삭제된 게시글입니다.");
         board.setContent("해당 게시글은 사용자가 의해 삭제되었습니다.");
         board.setModifiedDate(LocalDateTime.now());
         Board updatedBoard = boardRepository.save(board);
         return updatedBoard.toDTO();
     }
+
+
+
     // 유저- 로그인 중인 회원의 게시글 수정
-    public BoardDTO updateBoard(Long id, BoardDTO boardDTO, String username){
+    public BoardDTO updateBoard(Long id, BoardDTO boardDTO, String username) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Board not found"));
         if (!board.getAuthor().getUserName().equals(username)) {
@@ -102,13 +122,24 @@ public class BoardService {
     }
 
     // 유저- 로그인한 사용자가 올린 게시글만 조회
-    public List<BoardAllDTO> loginBoardAll (String username) {
+    public List<BoardAllDTO> loginBoardAll(String username) {
         List<Board> boards = boardRepository.findByAuthor_UserName(username)
+                .filter(boards1 -> !boards1.isEmpty())
                 .orElseThrow(() -> new ResourceNotFoundException("해당 사용자의 게시글이 없습니다."));
         List<BoardAllDTO> boardAllDTOList = new ArrayList<>();
         for (Board board : boards) {
             boardAllDTOList.add(board.TODTO());
         }
         return boardAllDTOList;
+    }
+
+    public List<BoardDTO> getPage(int limit, int offset){
+        List<Board> boards = boardRepository.findBoardsByRecentOrder(limit, offset);
+        return boards.stream().map(Board::toDTO).collect(Collectors.toList());
+    }
+
+    public Integer getTotalPages(){
+        List<Board> boards = boardRepository.findAll();
+        return boards.size();
     }
 }

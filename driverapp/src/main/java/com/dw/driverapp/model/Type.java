@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Table(name="자동차종류")
 public class Type {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +22,5 @@ public class Type {
     private String name;
 
     @ManyToMany(mappedBy = "typeList")
-    private List<Subject> subjectList = new ArrayList<>();
-
+    private List<Subject>subjectList = new ArrayList<>();
 }

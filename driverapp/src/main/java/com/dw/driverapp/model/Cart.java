@@ -16,21 +16,23 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+
     @OneToOne
     @JoinColumn(name = "user_name")
     private User user;
 
-    public CartDTO toDTO(){
+    @OneToOne
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+
+
+
+    public CartDTO ToDto(){
         CartDTO cartDTO = new CartDTO();
         cartDTO.setId(this.id);
-        cartDTO.setSubjectTitle(this.subject.getTitle());
+        cartDTO.setSubjectName(this.subject.getTitle());
         cartDTO.setUsername(this.user.getUserName());
         cartDTO.setPrice(this.subject.getPrice());
         return cartDTO;
     }
-
-
 }

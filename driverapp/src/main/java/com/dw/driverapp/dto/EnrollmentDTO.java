@@ -2,6 +2,7 @@ package com.dw.driverapp.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -10,9 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class EnrollmentDTO {
-    private Long id;
     private String username;
-    private Long subjectId;
-    private LocalDateTime purchaseTime;
-
+    private String subjectName;
+    private double price;
+    private LocalDate purchaseTime;
 }

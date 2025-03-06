@@ -1,4 +1,3 @@
-
 package com.dw.driverapp.model;
 
 import com.dw.driverapp.dto.SubjectDTO;
@@ -23,16 +22,13 @@ public class Subject {
     private String title;
     @Column(name = "explanation")
     private String explanation;
-
     @ManyToMany
     @JoinTable(name = "subject_type",
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "type_id"))
     private List<Type> typeList = new ArrayList<>();
-
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private double price;
-
     @ManyToOne
     @JoinColumn(name = "instructor_name")
     private User user_fk;

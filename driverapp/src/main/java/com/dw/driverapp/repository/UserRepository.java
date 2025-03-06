@@ -1,4 +1,3 @@
-
 package com.dw.driverapp.repository;
 
 import com.dw.driverapp.model.User;
@@ -11,9 +10,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-
     Optional<User> findByUserName(String userName);
-    Optional<User> findByEmail(String email);
     Optional<List<User>> findByBirthdate(LocalDate birthdate);
     Optional<List<User>> findByRealName (String realName);
     Optional<List<User>> findByAuthority_AuthorityName(String authorityName);
@@ -36,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<List<User>> MostPointUser();
     @Query("select avg(u.point) from User u")
     Optional<Double> findAveragePoint();
+
+
+
 }

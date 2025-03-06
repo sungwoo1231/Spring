@@ -1,8 +1,6 @@
 package com.dw.driverapp.model;
 
-import com.dw.driverapp.dto.BoardDTO;
 import com.dw.driverapp.dto.CommentDTO;
-import com.dw.driverapp.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,13 +18,12 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_name")
+    @JoinColumn(name="user_name")
     private User user;
     @Column(name = "comment", nullable = false, columnDefinition = "TEXT") // 65535 byte
     private String comment;
-
     @ManyToOne
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name="board_id")
     private Board board;
 
     public CommentDTO toDTO(){
